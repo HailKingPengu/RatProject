@@ -37,6 +37,8 @@ namespace GXPEngine
 
         public float cooldown = 1;
 
+        public int bombs = 300;
+
         public Player(string image, float airFriction, float groundFriction, int tileSize, int offsetY, Digging main) : base(image)
         {
             SetOrigin(width / 2, height / 2);
@@ -104,7 +106,7 @@ namespace GXPEngine
 
         }
 
-        public void UpdateMovement(int up, int left, int down, int right, int dig)
+        public void UpdateInput(int up, int left, int down, int right, int dig, int bomb)
         {
             if (!grounded)
             {
@@ -156,6 +158,11 @@ namespace GXPEngine
             if (Input.GetKey(down) && Input.GetKeyDown(dig))
             {
                 main.DigTile(tileX, tileY + 1);
+            }
+
+            if (Input.GetKeyDown(bomb))
+            {
+                main.ExplodeTile(tileX, tileY);
             }
 
         }

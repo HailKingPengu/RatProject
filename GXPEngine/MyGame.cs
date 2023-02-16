@@ -2,6 +2,7 @@ using System;                                   // System contains a lot of defa
 using GXPEngine;                                // GXPEngine contains the engine
 using System.Drawing;                           // System.Drawing contains drawing tools such as Color definitions
 using TiledMapParser;
+using System.Xml;
 
 public class Digging : Game
 {
@@ -27,7 +28,7 @@ public class Digging : Game
     float jumpForce = 10f;
 
     public float screenShake;
-    float screenShakeFalloff = 0.7f;
+    float screenShakeFalloff = 0.97f;
 
     public float camX = 0;
     public float camY;
@@ -61,8 +62,8 @@ public class Digging : Game
     {
         camY += camSmooth * (((-player1.y + height / 2)+(-player2.y + height / 2)) / 2 - camY);
 
-        player1.UpdateMovement(87, 65, 83, 68, 69);
-        player2.UpdateMovement(73, 74, 75, 76, 85);
+        player1.UpdateInput(87, 65, 83, 68, 69, 81);
+        player2.UpdateInput(73, 74, 75, 76, 85, 79);
 
         terrain.UpdateTerrain(camY, false);
 
@@ -97,6 +98,32 @@ public class Digging : Game
         }
     }
 
+    public void ExplodeTile(int x, int y)
+    {
+        for (int ix = x - 1; ix <= x + 1; ix++) 
+        {
+            for (int iy = y - 1; iy <= y + 1; iy++)
+            {
+                if(ix >= 0 && ix < mapWidth && iy >= 0 && iy < mapHeight)
+                {
+                    terrain.terrainData[ix, iy] = -1;
+                }
+            }
+        }
+
+        screenShake = 30;
+        terrain.UpdateTerrain(camY, true);
+
+        //if (x > -1 && x < mapWidth && y > -1 && y < mapHeight)
+        //{
+        //    if (terrain.terrainData[x, y] > -1 && terrain.terrainData[x, y] < 4)
+        //    {
+        //        terrain.terrainData[x, y] = -1;
+        //        terrain.UpdateTerrain(camY, true);
+        //    }
+        //}
+    }
+
     static void Main()                          // Main() is the first method that's called when the program is run
     {
         new Digging().Start();
@@ -106,7 +133,7 @@ public class Digging : Game
     {
         if (screenShake > 1)
         {
-            screenShake *= screenShakeFalloff * (1 / Time.deltaTime);
+            screenShake *= screenShakeFalloff;// * (1 / Time.deltaTime);
             y += Utils.Random(-screenShake, screenShake);
             x += Utils.Random(-screenShake, screenShake);
         }
