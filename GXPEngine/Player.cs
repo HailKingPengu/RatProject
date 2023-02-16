@@ -75,7 +75,7 @@ namespace GXPEngine
             if (groundCheck.GetCollisions(false).Length > 1)
             {
                 grounded = true;
-                y = groundCheck.GetCollisions(false)[0].y - groundCheck.y - (Convert.ToInt32(main.y / tileSize) * tileSize);
+                y = groundCheck.GetCollisions(false)[0].y - groundCheck.y - (Convert.ToInt32(main.camY / tileSize) * tileSize);
             } 
             else
             {

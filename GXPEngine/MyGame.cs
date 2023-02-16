@@ -15,7 +15,7 @@ public class Digging : Game
     Player player1;
     Player player2;
 
-    UIHandler uiHandler = new UIHandler();
+    UIHandler uiHandler;
     Terrain terrain;
 
     int tileSize = 64;
@@ -23,17 +23,19 @@ public class Digging : Game
     int offsetY = -32;
 
     float gravity = 0.03f;
-    float movementForce = 0.08f;
+    float movementForce = 0.06f;
     float jumpForce = 10f;
 
-    float screenShake;
-    float screenShakeFalloff;
+    public float screenShake;
+    float screenShakeFalloff = 0.7f;
+
+    public float camX = 0;
+    public float camY;
 
     int camOffset;
 
     public Digging() : base(1000, 800, false)
     {     // Create a window that's 800x600 and NOT fullscreen
-
         player1 = new Player("Player1.jpg", 1.02f, 1.1f, tileSize, offsetY, this);
         AddChild(player1);
         player1.setMovementValues(gravity, movementForce, jumpForce);
@@ -42,29 +44,14 @@ public class Digging : Game
         AddChild(player2);
         player2.setMovementValues(gravity, movementForce, jumpForce);
 
-
-        tiles = new EasyDraw[width / tileSize, height / tileSize];
         mapWidth = width / tileSize + 1;
         mapHeight = 200;
-
-        //for (int x = 0; x < mapWidth; x++)
-        //{
-        //    for (int y = 0; y < mapHeight; y++)
-        //    {
-        //        tiles[x,y] = new EasyDraw(tileSize, tileSize);
-        //        tiles[x,y].Clear((80 - y * 2), (45 - y * 2), 0);
-        //        tiles[x, y].SetXY(x * tileSize, offsetY + y * tileSize);
-        //    }
-        //}
 
         terrain = new Terrain(mapWidth, mapHeight, width, height, tileSize, offsetY);
         AddChild(terrain);
 
-        //foreach(EasyDraw tile in tiles)
-        //{
-        //    tile.Stroke(Color.White);
-        //    AddChild(tile);
-        //}
+        uiHandler = new UIHandler(player1, player2);
+        AddChild(uiHandler);
 
         Console.WriteLine("MyGame initialized");
     }
@@ -72,14 +59,30 @@ public class Digging : Game
     // For every game object, Update is called every frame, by the engine:
     void Update()
     {
-        y += camSmooth * (((-player1.y + height / 2)+(-player2.y + height / 2)) / 2 - y);
+        camY += camSmooth * (((-player1.y + height / 2)+(-player2.y + height / 2)) / 2 - camY);
 
         player1.UpdateMovement(87, 65, 83, 68, 69);
         player2.UpdateMovement(73, 74, 75, 76, 85);
 
-        terrain.UpdateTerrain(y, false);
+        terrain.UpdateTerrain(camY, false);
 
-        //UpdateScreenShake();
+        SetXY(camX, camY);
+        uiHandler.SetXY(camX, -camY);
+
+        Console.WriteLine(camX);
+
+        UpdateScreenShake();
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    screenShake = 20;
+        //}
+
+        //simulated lag
+        //for(int i = 0; i < 5000; i++) 
+        //{
+        //    Console.WriteLine("LAG!");
+        //}
     }
 
     public void DigTile(int x, int y)
@@ -89,7 +92,7 @@ public class Digging : Game
             if (terrain.terrainData[x, y] > -1 && terrain.terrainData[x, y] < 4)
             {
                 terrain.terrainData[x, y] = -1;
-                terrain.UpdateTerrain(y, true);
+                terrain.UpdateTerrain(camY, true);
             }
         }
     }
@@ -101,8 +104,11 @@ public class Digging : Game
 
     void UpdateScreenShake()
     {
-        screenShake /= screenShake * screenShakeFalloff;
-        y += Utils.Random(-screenShake, screenShake);
-        x += Utils.Random(-screenShake, screenShake);
+        if (screenShake > 1)
+        {
+            screenShake *= screenShakeFalloff * (1 / Time.deltaTime);
+            y += Utils.Random(-screenShake, screenShake);
+            x += Utils.Random(-screenShake, screenShake);
+        }
     }
 }
