@@ -1,55 +1,70 @@
 using System;                                   // System contains a lot of default C# libraries 
 using GXPEngine;                                // GXPEngine contains the engine
 using System.Drawing;                           // System.Drawing contains drawing tools such as Color definitions
+using TiledMapParser;
 
 public class Digging : Game
 {
+
+    float camSmooth = 0.02f;
 
     EasyDraw[,] tiles;
     int mapWidth;
     int mapHeight;
 
-    Player player;
+    Player player1;
     Player player2;
 
-    int tileSize = 80;
+    UIHandler uiHandler = new UIHandler();
+    Terrain terrain;
 
-    int offsetY = 400;
+    int tileSize = 64;
+
+    int offsetY = -32;
 
     float gravity = 0.03f;
     float movementForce = 0.08f;
     float jumpForce = 10f;
+
+    float screenShake;
+    float screenShakeFalloff;
 
     int camOffset;
 
     public Digging() : base(1000, 800, false)
     {     // Create a window that's 800x600 and NOT fullscreen
 
+        player1 = new Player("Player1.jpg", 1.02f, 1.1f, tileSize, offsetY, this);
+        AddChild(player1);
+        player1.setMovementValues(gravity, movementForce, jumpForce);
 
-        player = new Player("background.jpg", 1.02f, 1.1f, tileSize, offsetY);
-        AddChild(player);
+        player2 = new Player("Player2.jpg", 1.02f, 1.1f, tileSize, offsetY, this);
+        AddChild(player2);
+        player2.setMovementValues(gravity, movementForce, jumpForce);
 
 
         tiles = new EasyDraw[width / tileSize, height / tileSize];
-        mapWidth = width / tileSize;
-        mapHeight = height / tileSize;
+        mapWidth = width / tileSize + 1;
+        mapHeight = 200;
 
-        for (int x = 0; x < width / tileSize; x++)
-        {
-            for (int y = 0; y < height / tileSize; y++)
-            {
-                tiles[x,y] = new EasyDraw(tileSize, tileSize);
-                tiles[x,y].Clear((80 - y * 2), (45 - y * 2), 0);
-                tiles[x, y].SetXY(x * tileSize, offsetY + y * tileSize);
+        //for (int x = 0; x < mapWidth; x++)
+        //{
+        //    for (int y = 0; y < mapHeight; y++)
+        //    {
+        //        tiles[x,y] = new EasyDraw(tileSize, tileSize);
+        //        tiles[x,y].Clear((80 - y * 2), (45 - y * 2), 0);
+        //        tiles[x, y].SetXY(x * tileSize, offsetY + y * tileSize);
+        //    }
+        //}
 
-            }
-        }
+        terrain = new Terrain(mapWidth, mapHeight, width, height, tileSize, offsetY);
+        AddChild(terrain);
 
-        foreach(EasyDraw tile in tiles)
-        {
-            tile.Stroke(Color.White);
-            AddChild(tile);
-        }
+        //foreach(EasyDraw tile in tiles)
+        //{
+        //    tile.Stroke(Color.White);
+        //    AddChild(tile);
+        //}
 
         Console.WriteLine("MyGame initialized");
     }
@@ -57,92 +72,37 @@ public class Digging : Game
     // For every game object, Update is called every frame, by the engine:
     void Update()
     {
-        UpdateMovement();
+        y += camSmooth * (((-player1.y + height / 2)+(-player2.y + height / 2)) / 2 - y);
 
+        player1.UpdateMovement(87, 65, 83, 68, 69);
+        player2.UpdateMovement(73, 74, 75, 76, 85);
+
+        terrain.UpdateTerrain(y, false);
+
+        //UpdateScreenShake();
     }
 
-    void UpdateMovement()
+    public void DigTile(int x, int y)
     {
-        if (!player.grounded)
+        if (x > -1 && x < mapWidth && y > -1 && y < mapHeight)
         {
-            player.velocityY += gravity * Time.deltaTime;
-        }
-        else
-        {
-            player.velocityY = 0;
-        }
-
-        //if (player.GetCollisions().Length != 0)
-        //{
-        //    player.velocityY = 0;
-        //}
-
-        //a
-        if (Input.GetKey(Key.D)) 
-        {
-            player.velocityX += movementForce * Time.deltaTime;
-
-            if (Input.GetKeyDown(Key.ENTER))
+            if (terrain.terrainData[x, y] > -1 && terrain.terrainData[x, y] < 4)
             {
-                if (player.tileX + 1 > -1 && player.tileX + 1 < mapWidth && player.tileY > -1 && player.tileY < mapHeight)
-                {
-                    if (tiles[player.tileX + 1, player.tileY] != null)
-                    {
-                        tiles[player.tileX + 1, player.tileY].Destroy();
-                    }
-                }
+                terrain.terrainData[x, y] = -1;
+                terrain.UpdateTerrain(y, true);
             }
         }
-        //d
-        if (Input.GetKey(Key.A)) 
-        {
-            player.velocityX -= movementForce * Time.deltaTime;
-
-            if (Input.GetKeyDown(Key.ENTER))
-            {
-                if (player.tileX - 1 > -1 && player.tileX - 1 < mapWidth && player.tileY > -1 && player.tileY < mapHeight)
-                {
-                    if (tiles[player.tileX - 1, player.tileY] != null)
-                    {
-                        tiles[player.tileX - 1, player.tileY].Destroy();
-                    }
-                }
-            }
-        }
-        //w
-        if (Input.GetKeyDown(Key.W) && player.grounded)
-        {
-            player.y -= 10;
-            player.velocityY -= jumpForce;
-            player.grounded = false;
-        }
-
-        if (Input.GetKey(Key.W) && Input.GetKeyDown(Key.ENTER))
-        {
-            if (player.tileX > -1 && player.tileX < mapWidth && player.tileY - 1 > -1 && player.tileY - 1 < mapHeight)
-            {
-                if (tiles[player.tileX, player.tileY - 1] != null)
-                {
-                    tiles[player.tileX, player.tileY - 1].Destroy();
-                }
-            }
-        }
-
-        if (Input.GetKey(Key.S) && Input.GetKeyDown(Key.ENTER))
-        {
-            if (player.tileX > -1 && player.tileX < mapWidth && player.tileY + 1 > -1 && player.tileY + 1 < mapHeight)
-            {
-                if (tiles[player.tileX, player.tileY + 1] != null)
-                {
-                    tiles[player.tileX, player.tileY + 1].Destroy();
-                }
-            }
-        }
-
     }
 
     static void Main()                          // Main() is the first method that's called when the program is run
     {
         new Digging().Start();
+    }
+
+    void UpdateScreenShake()
+    {
+        screenShake /= screenShake * screenShakeFalloff;
+        y += Utils.Random(-screenShake, screenShake);
+        x += Utils.Random(-screenShake, screenShake);
     }
 }

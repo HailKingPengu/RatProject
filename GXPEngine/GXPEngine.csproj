@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Terrain\Terrain.cs" />
+    <Compile Include="UI\ProgressBar.cs" />
+    <Compile Include="UI\UIHandler.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\SpriteBatch.cs" />
