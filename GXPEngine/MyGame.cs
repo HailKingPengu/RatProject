@@ -3,6 +3,7 @@ using GXPEngine;                                // GXPEngine contains the engine
 using System.Drawing;                           // System.Drawing contains drawing tools such as Color definitions
 using TiledMapParser;
 using System.Xml;
+using GXPEngine.Particles;
 
 public class Digging : Game
 {
@@ -94,6 +95,13 @@ public class Digging : Game
             {
                 terrain.terrainData[x, y] = -1;
                 terrain.UpdateTerrain(camY, true);
+
+                ParticleSystem particleSystem = new ParticleSystem(50, 30, 500, "DirtParticle.png", 1);
+                particleSystem.opacitySettings(0.8f, 0.0f);
+                particleSystem.setScale(0.3f, 0.6f);
+                particleSystem.setforces(3, 3, 0, 0.1f, 0.98f);
+                AddChild(particleSystem);
+                particleSystem.SetXY(x * tileSize, y * tileSize);
             }
         }
     }
@@ -110,6 +118,30 @@ public class Digging : Game
                 }
             }
         }
+
+        ParticleSystem particleSystem = new ParticleSystem(200, 10, 1000, "DirtParticle.png", 1);
+        particleSystem.opacitySettings(0.8f, 0.0f);
+        particleSystem.setScale(0.3f, 0.6f);
+        particleSystem.setforces(10, 10, 0, 0.1f, 0.98f);
+        AddChild(particleSystem);
+        particleSystem.SetXY(x * tileSize, y * tileSize);
+
+        for (int i = 0; i < Utils.Random(4, 12); i++)
+        {
+            ParticleSystem particleSystem2 = new ParticleSystem(40, 50, 2000, "DirtParticle.png", 1);
+            particleSystem2.opacitySettings(0.3f, 0.0f);
+            particleSystem2.setScale(0.1f, 0.9f);
+            particleSystem2.setforcesSync(12, 12, 0.4f, 0, 0.1f, 0.99f);
+            AddChild(particleSystem2);
+            particleSystem2.SetXY(x * tileSize, y * tileSize);
+        }
+
+        ParticleSystem particleSystem3 = new ParticleSystem(4, 10, 100, "ExplosionParticle.png", 1);
+        particleSystem3.opacitySettings(1, 0.0f);
+        particleSystem3.setScale(3, 1);
+        particleSystem3.setforces(100, 100, 0, 0, 0.4f);
+        AddChild(particleSystem3);
+        particleSystem3.SetXY(x * tileSize, y * tileSize);
 
         screenShake = 30;
         terrain.UpdateTerrain(camY, true);

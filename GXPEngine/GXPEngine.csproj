@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticleSystem.cs" />
     <Compile Include="Terrain\Terrain.cs" />
     <Compile Include="UI\ProgressBar.cs" />
     <Compile Include="UI\UIHandler.cs" />
