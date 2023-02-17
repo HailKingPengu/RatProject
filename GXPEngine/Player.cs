@@ -2,6 +2,7 @@
 using GXPEngine.Managers;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace GXPEngine
     internal class Player : Sprite
     {
 
-        Digging main;
+        GameInstance main;
 
         int tileSize;
         int offsetY;
@@ -37,9 +38,13 @@ namespace GXPEngine
 
         public float cooldown = 1;
 
-        public int bombs = 300;
+        public int bombs = 10;
 
-        public Player(string image, float airFriction, float groundFriction, int tileSize, int offsetY, Digging main) : base(image)
+        public int gameWidth;
+
+        Sprite light;
+
+        public Player(string image, float airFriction, float groundFriction, int tileSize, int offsetY, GameInstance main, int gameWidth) : base(image)
         {
             SetOrigin(width / 2, height / 2);
             this.airFriction = airFriction;
@@ -47,17 +52,28 @@ namespace GXPEngine
             this.tileSize = tileSize;
             this.offsetY = offsetY;
             this.main = main;
+            this.gameWidth = width;
+
+            light = new Sprite("circle2.png", false, false);
+            light.SetOrigin(light.width / 2, light.height / 2);
+            light.scale = 5;
+            //main.AddChildAt(light, 8);
+            light.blendMode = BlendMode.LIGHTING;
+
+            //collider.isTrigger = true;
 
             groundCheck = new EasyDraw(width - 1, 10);
             AddChild(groundCheck);
-            groundCheck.Clear(255);
+            //groundCheck.Clear(255);
             groundCheck.SetOrigin(groundCheck.width /2, groundCheck.height /2);
+            //groundCheck.collider.isTrigger = true;
             groundCheck.SetXY(0, height / 2);
 
             ceilingCheck = new EasyDraw(width - 1, 10);
             AddChild(ceilingCheck);
-            ceilingCheck.Clear(255);
+            //ceilingCheck.Clear(255);
             ceilingCheck.SetOrigin(ceilingCheck.width / 2, ceilingCheck.height / 2);
+            //groundCheck.collider.isTrigger = true;
             ceilingCheck.SetXY(0, -height / 2);
         }
 
@@ -71,13 +87,17 @@ namespace GXPEngine
         public void Update()
         {
 
+            light.SetXY(x, y);
+
+            Console.WriteLine("PLAYER GROUNDED : " + grounded);
+
             tileX = Convert.ToInt32(((x - (tileSize / 2)) / tileSize));
             tileY = Convert.ToInt32((((y - offsetY) - (tileSize / 2)) / tileSize));
 
             if (groundCheck.GetCollisions(false).Length > 1)
             {
                 grounded = true;
-                y = groundCheck.GetCollisions(false)[0].y - groundCheck.y - (Convert.ToInt32(main.camY / tileSize) * tileSize);
+                y = groundCheck.GetCollisions(false)[0].y - groundCheck.y - (Convert.ToInt32(main.camY / tileSize) * tileSize) - tileSize / 2;
             } 
             else
             {
@@ -104,10 +124,17 @@ namespace GXPEngine
                 x -= velocityX;
             }
 
+            //x = Mathf.Clamp(x, 0, gameWidth);
+
+            //Console.WriteLine("PLAYER POSITION : " + x);
+
         }
 
         public void UpdateInput(int up, int left, int down, int right, int dig, int bomb)
         {
+
+            bool alreadyDug = false;
+
             if (!grounded)
             {
                 velocityY += gravity * Time.deltaTime;
@@ -130,6 +157,7 @@ namespace GXPEngine
                 if (Input.GetKeyDown(dig))
                 {
                     main.DigTile(tileX + 1, tileY);
+                    alreadyDug = true;
                 }
             }
             //d
@@ -140,29 +168,31 @@ namespace GXPEngine
                 if (Input.GetKeyDown(dig))
                 {
                     main.DigTile(tileX - 1, tileY);
+                    alreadyDug = true;
                 }
             }
-            //w
-            if (Input.GetKeyDown(up) && grounded)
-            {
-                y -= 10;
-                velocityY -= jumpForce;
-                grounded = false;
-            }
+            ////w
+            //if (Input.GetKeyDown(up) && grounded)
+            //{
+            //    y -= 10;
+            //    velocityY -= jumpForce;
+            //    grounded = false;
+            //}
 
-            if (Input.GetKey(up) && Input.GetKeyDown(dig))
-            {
-                main.DigTile(tileX, tileY - 1);
-            }
+            //if (Input.GetKey(up) && Input.GetKeyDown(dig))
+            //{
+            //    main.DigTile(tileX, tileY - 1);
+            //}
 
-            if (Input.GetKey(down) && Input.GetKeyDown(dig))
+            if (Input.GetKeyDown(dig) && !alreadyDug)
             {
                 main.DigTile(tileX, tileY + 1);
             }
 
-            if (Input.GetKeyDown(bomb))
+            if (Input.GetKeyDown(bomb) && bombs > 0)
             {
                 main.ExplodeTile(tileX, tileY);
+                bombs--;
             }
 
         }

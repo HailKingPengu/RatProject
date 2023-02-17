@@ -9,7 +9,7 @@ namespace GXPEngine
 {
     internal class UIHandler : Pivot
     {
-
+        
         public ProgressBar diggingP1;
         public ProgressBar diggingP2;
 

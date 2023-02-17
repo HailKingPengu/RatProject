@@ -16,13 +16,15 @@ namespace GXPEngine
         int displayHeight;
 
         public int[,] terrainData;
+        public int[,] terrainRotations;
 
         public AnimationSprite[,] tiles;
 
         public Terrain(int mapWidth, int mapHeight, int screenWidth, int screenHeight, int tileSize, int offset)
         {
-            terrainData = new int[mapWidth,mapHeight];
-            tiles = new AnimationSprite[mapWidth,mapHeight];
+            terrainData = new int[mapWidth, mapHeight];
+            terrainRotations = new int[mapWidth, mapHeight]; 
+            tiles = new AnimationSprite[mapWidth, mapHeight];
 
             displayWidth = screenWidth / tileSize + 1;
             displayHeight = screenHeight / tileSize + 2;
@@ -34,7 +36,8 @@ namespace GXPEngine
                 for (int y = 0; y < displayHeight; y++)
                 {
                     tiles[x, y] = new AnimationSprite("tiles.png", 8, 1);
-                    tiles[x, y].SetXY(x * tileSize, offset + y * tileSize);
+                    tiles[x, y].SetOrigin(tiles[x, y].width / 2, tiles[x, y].height / 2);
+                    tiles[x, y].SetXY((x + 0.5f) * tileSize, offset + (y + 0.5f) * tileSize);
                     AddChild(tiles[x, y]);
                 }
 
@@ -49,10 +52,13 @@ namespace GXPEngine
                     //    terrainData[x, y] += 4;
                     //}
 
-                    if (Utils.Random(0, Convert.ToInt32(15 - (3/2) * Math.Sqrt(y))) == 1)
+                    if (Utils.Random(0, Convert.ToInt32(15 - (3 / 2) * Math.Sqrt(y))) == 1)
                     {
                         terrainData[x, y] += 4;
                     }
+
+                    terrainRotations[x, y] = Utils.Random(0, 4);
+
                 }
             }
 
@@ -82,7 +88,7 @@ namespace GXPEngine
 
             Console.WriteLine(offsetY);
 
-            if (offsetY != oldOffsetY || forceUpdate) 
+            if (offsetY != oldOffsetY || forceUpdate)
             {
                 for (int x = 0; x < displayWidth; x++)
                 {
@@ -99,19 +105,21 @@ namespace GXPEngine
                             {
                                 tiles[x, y].visible = true;
                                 tiles[x, y].currentFrame = terrainData[x, y + offsetY];
+                                tiles[x, y].rotation = 90 * terrainRotations[x, y + offsetY];
                                 tiles[x, y].collider.isTrigger = false;
                             }
                         }
                         else
                         {
                             tiles[x, y].visible = false;
+
                             tiles[x, y].collider.isTrigger = true;
                         }
                     }
                 }
             }
         }
-        
+
 
 
 
