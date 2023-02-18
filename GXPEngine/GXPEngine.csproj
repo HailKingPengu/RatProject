@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameInstance.cs" />
+    <Compile Include="Lighting\LightingOverlay.cs" />
+    <Compile Include="Lighting\Light.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleSystem.cs" />
     <Compile Include="Terrain\Terrain.cs" />

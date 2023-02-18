@@ -86,7 +86,7 @@ namespace GXPEngine
             //y = Mathf.Clamp((offsetY * tileSize), -20,  0);
             y = offsetY * tileSize;
 
-            Console.WriteLine(offsetY);
+            //Console.WriteLine(offsetY);
 
             if (offsetY != oldOffsetY || forceUpdate)
             {

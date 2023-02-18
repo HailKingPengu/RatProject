@@ -38,7 +38,7 @@ namespace GXPEngine
 
         public float cooldown = 1;
 
-        public int bombs = 10;
+        public int bombs = 1000;
 
         public int gameWidth;
 
@@ -89,7 +89,7 @@ namespace GXPEngine
 
             light.SetXY(x, y);
 
-            Console.WriteLine("PLAYER GROUNDED : " + grounded);
+            //Console.WriteLine("PLAYER GROUNDED : " + grounded);
 
             tileX = Convert.ToInt32(((x - (tileSize / 2)) / tileSize));
             tileY = Convert.ToInt32((((y - offsetY) - (tileSize / 2)) / tileSize));

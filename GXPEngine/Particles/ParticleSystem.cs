@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,8 +29,13 @@ namespace GXPEngine.Particles
         float beginOpacity = 1;
         float endOpacity = 1;
 
+        float beginColor = 1;
+        float endColor = 1;
+
         float maxScale = 1;
         float minScale = 1;
+
+        BlendMode blendMode;
 
         public ParticleSystem(int numParticles, int spawningTime, int maxLifeTime, String fileName, int frames) : base(false)
         {
@@ -44,6 +50,12 @@ namespace GXPEngine.Particles
         {
             this.beginOpacity = beginOpacity;
             this.endOpacity = endOpacity;
+        }
+
+        public void colorSettings(float beginColor, float endColor)
+        {
+            this.beginColor = beginColor;
+            this.endColor = endColor;
         }
 
         public void setforces(float velX, float velY, float forceX, float forceY, float friction)
@@ -73,6 +85,11 @@ namespace GXPEngine.Particles
             this.minScale = minScale;
         }
 
+        public void setBlendMode(BlendMode blendMode)
+        {
+            this.blendMode = blendMode;
+        }
+
         public void Update()
         {
             int particlesToSpawn = Convert.ToInt32((Time.deltaTime / spawningTime) * numParticles);
@@ -82,7 +99,7 @@ namespace GXPEngine.Particles
             {
                 for (int i = 0; i < particlesToSpawn; i++)
                 {
-                    Particle p = new Particle(beginOpacity, endOpacity, maxLifeTime, fileName, frames);
+                    Particle p = new Particle(beginOpacity, endOpacity, beginColor, endColor, maxLifeTime, fileName, frames);
                     switch (forceType)
                     {
                         case 0:
@@ -92,7 +109,9 @@ namespace GXPEngine.Particles
                             p.setForcesSync(velX, velY, random, forceX, forceY, friction);
                         break;
                     }
+                    p.SetOrigin(p.width/2, p.height/2);
                     p.SetScaleXY(Utils.Random(minScale, maxScale));
+                    p.blendMode = blendMode;
                     AddChild(p);
                 }
             }

@@ -14,6 +14,9 @@ namespace GXPEngine.Particles
         float beginOpacity;
         float deltaOpacity;
 
+        float beginColor;
+        float deltaColor;
+
         float velocityX;
         float velocityY;
 
@@ -22,12 +25,16 @@ namespace GXPEngine.Particles
 
         float friction;
 
-        public Particle(float beginOpacity, float endOpacity, int maxLifeTime, String fileName, int frames) : base(fileName, 1, frames, -1, false, false)
+        public Particle(float beginOpacity, float endOpacity, float beginColor, float endColor, int maxLifeTime, String fileName, int frames) : base(fileName, 1, frames, -1, false, false)
         {
             alpha = beginOpacity;
             this.beginOpacity = beginOpacity;
             deltaOpacity = beginOpacity - endOpacity;
             this.maxLifeTime = maxLifeTime;
+
+            SetColor(beginColor, beginColor, beginColor);
+            this.beginColor = beginColor;
+            deltaColor = beginColor - endColor;
 
             currentFrame = Utils.Random(0, frames - 1);
         }
@@ -58,7 +65,12 @@ namespace GXPEngine.Particles
 
             SetXY(x + velocityX, y + velocityY);
             lifeTime += Time.deltaTime;
+
             alpha = beginOpacity - deltaOpacity * lifeTime / maxLifeTime;
+
+            float color = beginColor - deltaColor * lifeTime / maxLifeTime;
+            SetColor(color, color, color);
+
             if (lifeTime > maxLifeTime)
             {
                 this.Destroy();

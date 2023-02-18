@@ -42,6 +42,7 @@ namespace GXPEngine
 
         int camOffset;
 
+        LightingOverlay lightingOverlay;
 
         Sprite background;
         Sprite background2;
@@ -74,6 +75,13 @@ namespace GXPEngine
             terrain = new Terrain(mapWidth, mapHeight, screenWidth, screenHeight, tileSize, offsetY);
             AddChild(terrain);
 
+            lightingOverlay = new LightingOverlay(screenWidth, screenHeight);
+            AddChild(lightingOverlay);
+            lightingOverlay.AddLightSource(player1, 4);
+            lightingOverlay.AddLightSource(player2, 4);
+            lightingOverlay.AddLightSource(player1, 12);
+            lightingOverlay.AddLightSource(player2, 12);
+
             uiHandler = new UIHandler(player1, player2);
             AddChild(uiHandler);
 
@@ -89,13 +97,16 @@ namespace GXPEngine
 
             terrain.UpdateTerrain(camY, false);
 
-            Console.WriteLine("CAMERA POSITION : " + camX + ", " + camY);
+            //Console.WriteLine("CAMERA POSITION : " + camX + ", " + camY);
 
             SetXY(camX, camY);
             uiHandler.SetXY(camX, -camY);
 
             background.SetXY(camX, -camY);
             background2.SetXY(camX, -camY + background.height);
+
+            lightingOverlay.UpdateOverlay(player1.y / tileSize);
+            lightingOverlay.SetXY(camX, -camY);
 
             UpdateScreenShake();
 
@@ -143,12 +154,30 @@ namespace GXPEngine
                 }
             }
 
-            ParticleSystem particleSystem = new ParticleSystem(80, 10, 1000, "DirtParticle.png", 1);
+            ParticleSystem particleSystem3 = new ParticleSystem(4, 40, 300, "ExplosionParticle.png", 1);
+            particleSystem3.opacitySettings(0.2f, 0.0f);
+            particleSystem3.setScale(3, 1);
+            particleSystem3.setforces(40, 40, 0, 0, 0.6f);
+            AddChild(particleSystem3);
+            particleSystem3.SetXY(x * tileSize, y * tileSize);
+
+
+            ParticleSystem particleSystem = new ParticleSystem(80, 40, 1000, "DirtParticle.png", 1);
             particleSystem.opacitySettings(0.8f, 0.0f);
             particleSystem.setScale(0.3f, 0.6f);
             particleSystem.setforces(10, 10, 0, 0.1f, 0.98f);
             AddChild(particleSystem);
             particleSystem.SetXY(x * tileSize, y * tileSize);
+
+
+            ParticleSystem particleSystem5 = new ParticleSystem(20, 40, 2000, "circle2.png", 1);
+            particleSystem5.colorSettings(1, 0.0f);
+            particleSystem5.setScale(0.2f, 0.3f);
+            particleSystem5.setforces(8, 8, 0, 0.1f, 0.99f);
+            particleSystem5.setBlendMode(BlendMode.LIGHTING);
+            AddChild(particleSystem5);
+            particleSystem5.SetXY(x * tileSize, y * tileSize);
+
 
             for (int i = 0; i < Utils.Random(4, 12); i++)
             {
@@ -160,14 +189,15 @@ namespace GXPEngine
                 particleSystem2.SetXY(x * tileSize, y * tileSize);
             }
 
-            ParticleSystem particleSystem3 = new ParticleSystem(4, 10, 100, "ExplosionParticle.png", 1);
-            particleSystem3.opacitySettings(1, 0.0f);
-            particleSystem3.setScale(3, 1);
-            particleSystem3.setforces(100, 100, 0, 0, 0.4f);
-            AddChild(particleSystem3);
-            particleSystem3.SetXY(x * tileSize, y * tileSize);
+            ParticleSystem particleSystem4 = new ParticleSystem(6, 40, 200, "circle2.png", 1);
+            particleSystem4.colorSettings(1, 0.0f);
+            particleSystem4.setScale(12, 2);
+            particleSystem4.setforces(90, 90, 0, 0, 0.4f);
+            particleSystem4.setBlendMode(BlendMode.LIGHTING);
+            AddChild(particleSystem4);
+            particleSystem4.SetXY(x * tileSize, y * tileSize);
 
-            screenShake = 30;
+            screenShake = 20;
             terrain.UpdateTerrain(camY, true);
 
             //if (x > -1 && x < mapWidth && y > -1 && y < mapHeight)
@@ -188,7 +218,7 @@ namespace GXPEngine
                 y += Utils.Random(-screenShake, screenShake);
                 x += Utils.Random(-screenShake, screenShake);
 
-                Console.WriteLine(Time.deltaTime);
+                //Console.WriteLine(Time.deltaTime);
             }
         }
     }
