@@ -57,8 +57,6 @@ namespace GXPEngine
 
         bool paused = false;
 
-        int dDelay;
-
         public GameInstance(int screenWidth, int screenHeight, string backgroundImage) 
         {
             this.screenWidth = screenWidth;
@@ -200,6 +198,26 @@ namespace GXPEngine
                         terrain.UpdateTerrain(camY1, true);
 
                         SpawnDigParticles(x * tileSize + offsetX, y * tileSize);
+
+                        screenShake1 = 1;
+                    }
+                    else if (terrain.terrainData[x, y] > 7 && terrain.terrainData[x, y] < 12)
+                    {
+                        terrain.terrainData[x, y] += 4;
+                        terrain.UpdateTerrain(camY1, true);
+
+                        SpawnStoneSparkParticles(x * tileSize + offsetX, y * tileSize);
+
+                        screenShake1 = 5;
+                    }
+                    else if (terrain.terrainData[x, y] > 11 && terrain.terrainData[x, y] < 16)
+                    {
+                        terrain.terrainData[x, y] = -1;
+                        terrain.UpdateTerrain(camY1, true);
+
+                        SpawnStoneParticles(x * tileSize + offsetX, y * tileSize);
+
+                        screenShake1 = 3;
                     }
                 }
             }
@@ -213,6 +231,26 @@ namespace GXPEngine
                         terrain2.UpdateTerrain(camY2, true);
 
                         SpawnDigParticles(x * tileSize + offsetX, y * tileSize);
+
+                        screenShake2 = 1;
+                    }
+                    else if (terrain.terrainData[x, y] > 7 && terrain.terrainData[x, y] < 12)
+                    {
+                        terrain.terrainData[x, y] += 4;
+                        terrain.UpdateTerrain(camY1, true);
+
+                        SpawnStoneSparkParticles(x * tileSize + offsetX, y * tileSize);
+
+                        screenShake2 = 5;
+                    }
+                    else if (terrain.terrainData[x, y] > 11 && terrain.terrainData[x, y] < 16)
+                    {
+                        terrain.terrainData[x, y] = -1;
+                        terrain.UpdateTerrain(camY1, true);
+
+                        SpawnStoneParticles(x * tileSize + offsetX, y * tileSize);
+
+                        screenShake2 = 3;
                     }
                 }
             }
@@ -290,7 +328,35 @@ namespace GXPEngine
             particleSystem.opacitySettings(0.8f, 0.0f);
             particleSystem.setScale(0.3f, 0.6f);
             particleSystem.setforces(3, 3, 0, 0.1f, 0.98f);
-            AddChild(particleSystem);
+            AddChildAt(particleSystem, 40);
+            particleSystem.SetXY(x, y);
+        }
+
+        void SpawnStoneSparkParticles(int x, int y)
+        {
+            ParticleSystem particleSystem5 = new ParticleSystem(15, 40, 2000, "circle2.png", 1);
+            particleSystem5.colorSettings(1, 0.0f);
+            particleSystem5.setScale(0.1f, 0.2f);
+            particleSystem5.setforces(6, 6, 0, 0.1f, 0.99f);
+            particleSystem5.setBlendMode(BlendMode.LIGHTING);
+            AddChildAt(particleSystem5, 40);
+            particleSystem5.SetXY(x, y);
+
+            ParticleSystem particleSystem = new ParticleSystem(8, 40, 1000, "StoneParticle.png", 1);
+            particleSystem.opacitySettings(0.8f, 0.0f);
+            particleSystem.setScale(0.3f, 0.6f);
+            particleSystem.setforces(5, 5, 0, 0.1f, 0.98f);
+            AddChildAt(particleSystem, 40);
+            particleSystem.SetXY(x, y);
+        }
+
+        void SpawnStoneParticles(int x, int y)
+        {
+            ParticleSystem particleSystem = new ParticleSystem(60, 40, 1000, "StoneParticle.png", 1);
+            particleSystem.opacitySettings(0.8f, 0.0f);
+            particleSystem.setScale(0.3f, 0.6f);
+            particleSystem.setforces(8, 8, 0, 0.1f, 0.98f);
+            AddChildAt(particleSystem, 40);
             particleSystem.SetXY(x, y);
         }
 
@@ -300,7 +366,7 @@ namespace GXPEngine
             particleSystem3.opacitySettings(0.2f, 0.0f);
             particleSystem3.setScale(3, 1);
             particleSystem3.setforces(40, 40, 0, 0, 0.6f);
-            AddChild(particleSystem3);
+            AddChildAt(particleSystem3, 40);
             particleSystem3.SetXY(x, y);
 
 
@@ -308,7 +374,7 @@ namespace GXPEngine
             particleSystem.opacitySettings(0.8f, 0.0f);
             particleSystem.setScale(0.3f, 0.6f);
             particleSystem.setforces(10, 10, 0, 0.1f, 0.98f);
-            AddChild(particleSystem);
+            AddChildAt(particleSystem, 40);
             particleSystem.SetXY(x, y);
 
 
@@ -317,7 +383,7 @@ namespace GXPEngine
             particleSystem5.setScale(0.2f, 0.3f);
             particleSystem5.setforces(8, 8, 0, 0.1f, 0.99f);
             particleSystem5.setBlendMode(BlendMode.LIGHTING);
-            AddChild(particleSystem5);
+            AddChildAt(particleSystem5, 40);
             particleSystem5.SetXY(x, y);
 
 
@@ -327,7 +393,7 @@ namespace GXPEngine
                 particleSystem2.opacitySettings(0.3f, 0.0f);
                 particleSystem2.setScale(0.1f, 0.9f);
                 particleSystem2.setforcesSync(12, 12, 0.4f, 0, 0.1f, 0.99f);
-                AddChild(particleSystem2);
+                AddChildAt(particleSystem2, 40);
                 particleSystem2.SetXY(x, y);
             }
 
@@ -336,7 +402,7 @@ namespace GXPEngine
             particleSystem4.setScale(12, 2);
             particleSystem4.setforces(90, 90, 0, 0, 0.4f);
             particleSystem4.setBlendMode(BlendMode.LIGHTING);
-            AddChild(particleSystem4);
+            AddChildAt(particleSystem4, 40);
             particleSystem4.SetXY(x, y);
         }
     }

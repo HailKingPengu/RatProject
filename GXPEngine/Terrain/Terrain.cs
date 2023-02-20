@@ -37,7 +37,7 @@ namespace GXPEngine
             {
                 for (int y = 0; y < displayHeight; y++)
                 {
-                    tiles[x, y] = new AnimationSprite("tiles.png", 8, 1);
+                    tiles[x, y] = new AnimationSprite("tiles.png", 16, 1);
                     tiles[x, y].SetOrigin(tiles[x, y].width / 2, tiles[x, y].height / 2);
                     tiles[x, y].SetXY((x + 0.5f) * tileSize, offsetY + (y + 0.5f) * tileSize);
                     AddChild(tiles[x, y]);
@@ -57,6 +57,10 @@ namespace GXPEngine
                     if (Utils.Random(0, Convert.ToInt32(15 - (3 / 2) * Math.Sqrt(y))) == 1)
                     {
                         terrainData[x, y] += 4;
+                    }
+                    else if (Utils.Random(0, Convert.ToInt32(15 - (3 / 2) * Math.Sqrt(y))) == 1)
+                    {
+                        terrainData[x, y] += 8;
                     }
 
                     terrainRotations[x, y] = Utils.Random(0, 4);
