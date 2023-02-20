@@ -234,19 +234,19 @@ namespace GXPEngine
 
                         screenShake2 = 1;
                     }
-                    else if (terrain.terrainData[x, y] > 7 && terrain.terrainData[x, y] < 12)
+                    else if (terrain2.terrainData[x, y] > 7 && terrain2.terrainData[x, y] < 12)
                     {
-                        terrain.terrainData[x, y] += 4;
-                        terrain.UpdateTerrain(camY1, true);
+                        terrain2.terrainData[x, y] += 4;
+                        terrain2.UpdateTerrain(camY2, true);
 
                         SpawnStoneSparkParticles(x * tileSize + offsetX, y * tileSize);
 
                         screenShake2 = 5;
                     }
-                    else if (terrain.terrainData[x, y] > 11 && terrain.terrainData[x, y] < 16)
+                    else if (terrain2.terrainData[x, y] > 11 && terrain2.terrainData[x, y] < 16)
                     {
-                        terrain.terrainData[x, y] = -1;
-                        terrain.UpdateTerrain(camY1, true);
+                        terrain2.terrainData[x, y] = -1;
+                        terrain2.UpdateTerrain(camY2, true);
 
                         SpawnStoneParticles(x * tileSize + offsetX, y * tileSize);
 
