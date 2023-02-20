@@ -33,8 +33,8 @@ namespace GXPEngine
 
         public void UpdateOverlay(float cameraDepth)
         {
-            overlay.Clear(255 - Convert.ToInt32(Mathf.Clamp(cameraDepth, 0, 200)));
-            Console.WriteLine(cameraDepth);
+            overlay.Clear(255 - Convert.ToInt32(Mathf.Clamp(cameraDepth, 0, 175)));
+            //Console.WriteLine(cameraDepth);
 
             foreach(Light light in lights)
             {

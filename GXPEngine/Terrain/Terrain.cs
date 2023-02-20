@@ -20,8 +20,10 @@ namespace GXPEngine
 
         public AnimationSprite[,] tiles;
 
-        public Terrain(int mapWidth, int mapHeight, int screenWidth, int screenHeight, int tileSize, int offset)
+        public Terrain(int mapWidth, int mapHeight, int screenWidth, int screenHeight, int tileSize, int offsetX, int offsetY)
         {
+            x = offsetX;
+
             terrainData = new int[mapWidth, mapHeight];
             terrainRotations = new int[mapWidth, mapHeight]; 
             tiles = new AnimationSprite[mapWidth, mapHeight];
@@ -37,7 +39,7 @@ namespace GXPEngine
                 {
                     tiles[x, y] = new AnimationSprite("tiles.png", 8, 1);
                     tiles[x, y].SetOrigin(tiles[x, y].width / 2, tiles[x, y].height / 2);
-                    tiles[x, y].SetXY((x + 0.5f) * tileSize, offset + (y + 0.5f) * tileSize);
+                    tiles[x, y].SetXY((x + 0.5f) * tileSize, offsetY + (y + 0.5f) * tileSize);
                     AddChild(tiles[x, y]);
                 }
 

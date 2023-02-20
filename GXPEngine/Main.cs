@@ -11,7 +11,6 @@ public class Digging : Game
 
     MenuHandler menus;
     GameInstance game;
-    GameInstance game2;
 
     public Digging() : base(1366, 768, false)
     {

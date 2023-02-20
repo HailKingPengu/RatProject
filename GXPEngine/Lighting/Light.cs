@@ -23,7 +23,7 @@ namespace GXPEngine
 
         void Update()
         {
-            SetXY(point.x, point.y - offset.y);
+            SetXY(point.x - offset.x, point.y - offset.y);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace GXPEngine
         GameInstance main;
 
         int tileSize;
+        int offsetX;
         int offsetY;
 
         public int tileX;
@@ -38,18 +39,22 @@ namespace GXPEngine
 
         public float cooldown = 1;
 
-        public int bombs = 1000;
+        public int bombs = 10;
 
         public int gameWidth;
 
         Sprite light;
 
-        public Player(string image, float airFriction, float groundFriction, int tileSize, int offsetY, GameInstance main, int gameWidth) : base(image)
+        int playerID;
+
+        public Player(int playerID, string image, float airFriction, float groundFriction, int tileSize, int offsetX, int offsetY, GameInstance main, int gameWidth) : base(image)
         {
             SetOrigin(width / 2, height / 2);
+            this.playerID = playerID;
             this.airFriction = airFriction;
             this.groundFriction = groundFriction;
             this.tileSize = tileSize;
+            this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.main = main;
             this.gameWidth = width;
@@ -84,25 +89,28 @@ namespace GXPEngine
             this.jumpForce = jumpForce;
         }
 
-        public void Update()
+        public void UpdateGeneral(float camY)
         {
 
             light.SetXY(x, y);
 
             //Console.WriteLine("PLAYER GROUNDED : " + grounded);
 
-            tileX = Convert.ToInt32(((x - (tileSize / 2)) / tileSize));
+            tileX = Convert.ToInt32((((x - offsetX) - (tileSize / 2)) / tileSize));
             tileY = Convert.ToInt32((((y - offsetY) - (tileSize / 2)) / tileSize));
 
-            if (groundCheck.GetCollisions(false).Length > 1)
+            if (groundCheck.GetCollisions(false).Length > 1 && groundCheck.GetCollisions(false)[0].y != 0)
             {
                 grounded = true;
-                y = groundCheck.GetCollisions(false)[0].y - groundCheck.y - (Convert.ToInt32(main.camY / tileSize) * tileSize) - tileSize / 2;
+
+                y = groundCheck.GetCollisions(false)[0].y - groundCheck.y - (Convert.ToInt32(camY / tileSize) * tileSize) - tileSize / 2;
             } 
             else
             {
                 grounded = false;
             }
+
+            //Console.WriteLine(grounded);
 
             if (ceilingCheck.GetCollisions(false).Length > 1)
             {
@@ -156,7 +164,7 @@ namespace GXPEngine
 
                 if (Input.GetKeyDown(dig))
                 {
-                    main.DigTile(tileX + 1, tileY);
+                    main.DigTile(tileX + 1, tileY, playerID, offsetX);
                     alreadyDug = true;
                 }
             }
@@ -167,7 +175,7 @@ namespace GXPEngine
 
                 if (Input.GetKeyDown(dig))
                 {
-                    main.DigTile(tileX - 1, tileY);
+                    main.DigTile(tileX - 1, tileY, playerID, offsetX);
                     alreadyDug = true;
                 }
             }
@@ -186,12 +194,12 @@ namespace GXPEngine
 
             if (Input.GetKeyDown(dig) && !alreadyDug)
             {
-                main.DigTile(tileX, tileY + 1);
+                main.DigTile(tileX, tileY + 1, playerID, offsetX);
             }
 
             if (Input.GetKeyDown(bomb) && bombs > 0)
             {
-                main.ExplodeTile(tileX, tileY);
+                main.ExplodeTile(tileX, tileY, playerID, offsetX);
                 bombs--;
             }
 
