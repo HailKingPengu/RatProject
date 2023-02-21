@@ -22,6 +22,9 @@ namespace GXPEngine
         public int tileX;
         public int tileY;
 
+        int minX;
+        int maxX;
+
         public EasyDraw groundCheck;
         public EasyDraw ceilingCheck;
 
@@ -57,7 +60,10 @@ namespace GXPEngine
             this.offsetX = offsetX;
             this.offsetY = offsetY;
             this.main = main;
-            this.gameWidth = width;
+            this.gameWidth = gameWidth;
+
+            minX = offsetX;
+            maxX = offsetX + gameWidth;
 
             light = new Sprite("circle2.png", false, false);
             light.SetOrigin(light.width / 2, light.height / 2);
@@ -135,6 +141,8 @@ namespace GXPEngine
             //x = Mathf.Clamp(x, 0, gameWidth);
 
             //Console.WriteLine("PLAYER POSITION : " + x);
+
+            x = Mathf.Clamp(x, minX, maxX);
 
         }
 

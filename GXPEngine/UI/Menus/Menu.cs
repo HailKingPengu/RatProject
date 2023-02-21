@@ -15,20 +15,49 @@ namespace GXPEngine.UI.Menus
         List<Button> buttons;
         List<Sprite> sprites;
 
+        int currentButton;
+
         public Menu(String background, int screenWidth, int screenHeight) 
         { 
             this.background = new Sprite(background, false, false);
-            this.background.SetScaleXY(screenWidth / this.background.width, screenHeight / this.background.height);
+            this.background.SetScaleXY((float)screenWidth / (float)this.background.width, (float)screenHeight / (float)this.background.height);
             AddChild(this.background);
 
-            this.buttons = new List<Button>();
-            this.sprites = new List<Sprite>();
+            buttons = new List<Button>();
+            sprites = new List<Sprite>();
         }
 
         public void AddButton(Button button)
         {
-            this.buttons.Add(button);
+            buttons.Add(button);
             AddChild(button);
+        }
+
+        public void NextButton()
+        {
+            buttons[currentButton].Selected(false);
+            currentButton++;
+            if (currentButton == buttons.Count)
+            {
+                currentButton = 0;
+            }
+            buttons[currentButton].Selected(true);
+        }
+
+        public void PreviousButton()
+        {
+            buttons[currentButton].Selected(false);
+            currentButton--;
+            if (currentButton == -1)
+            {
+                currentButton = buttons.Count - 1;
+            }
+            buttons[currentButton].Selected(true);
+        }
+
+        public void ButtonPressed()
+        {
+            buttons[currentButton].Pressed();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace GXPEngine
         Sprite background3;
         Sprite background4;
 
-        bool paused = false;
+        public bool paused = false;
 
         public GameInstance(int screenWidth, int screenHeight, string backgroundImage) 
         {
@@ -77,11 +77,11 @@ namespace GXPEngine
             mapWidth = screenWidth / tileSize + 1;
             mapHeight = 200;
 
-            player1 = new Player(0, "Player1.jpg", 1.02f, 1.1f, tileSize, 0, offsetY, this, screenWidth);
+            player1 = new Player(0, "Player1.jpg", 1.02f, 1.1f, tileSize, 0, offsetY, this, screenWidth/2);
             player1.SetXY(200, -100);
             player1.setMovementValues(gravity, movementForce, jumpForce);
 
-            player2 = new Player(1, "Player2.jpg", 1.02f, 1.1f, tileSize, 800,  offsetY, this, screenWidth);
+            player2 = new Player(1, "Player2.jpg", 1.02f, 1.1f, tileSize, 800,  offsetY, this, screenWidth/2);
             player2.SetXY(800, -100);
             player2.setMovementValues(gravity, movementForce, jumpForce);
 
@@ -190,7 +190,7 @@ namespace GXPEngine
         {
             if (player == 0)
             {
-                if (x > -1 && x < mapWidth && y > -1 && y < mapHeight)
+                if (x > -1 && x < mapWidth / 2 && y > -1 && y < mapHeight)
                 {
                     if (terrain.terrainData[x, y] > -1 && terrain.terrainData[x, y] < 4)
                     {
@@ -223,7 +223,7 @@ namespace GXPEngine
             }
             else
             {
-                if (x > -1 && x < mapWidth && y > -1 && y < mapHeight)
+                if (x > -1 && x < mapWidth / 2 && y > -1 && y < mapHeight)
                 {
                     if (terrain2.terrainData[x, y] > -1 && terrain2.terrainData[x, y] < 4)
                     {
@@ -264,7 +264,7 @@ namespace GXPEngine
                 {
                     for (int iy = y - 1; iy <= y + 1; iy++)
                     {
-                        if (ix >= 0 && ix < mapWidth && iy >= 0 && iy < mapHeight)
+                        if (ix >= 0 && ix < mapWidth / 2 && iy >= 0 && iy < mapHeight)
                         {
                             terrain.terrainData[ix, iy] = -1;
                         }
@@ -279,7 +279,7 @@ namespace GXPEngine
                 {
                     for (int iy = y - 1; iy <= y + 1; iy++)
                     {
-                        if (ix >= 0 && ix < mapWidth && iy >= 0 && iy < mapHeight)
+                        if (ix >= 0 && ix < mapWidth / 2 && iy >= 0 && iy < mapHeight)
                         {
                             terrain2.terrainData[ix, iy] = -1;
                         }
