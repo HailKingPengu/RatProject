@@ -10,7 +10,7 @@ using TiledMapParser;
 
 namespace GXPEngine
 {
-    internal class Player : Sprite
+    internal class Player : AnimationSprite
     {
 
         GameInstance main;
@@ -50,7 +50,10 @@ namespace GXPEngine
 
         int playerID;
 
-        public Player(int playerID, string image, float airFriction, float groundFriction, int tileSize, int offsetX, int offsetY, GameInstance main, int gameWidth) : base(image)
+        int diggingDelay;
+        int direction;
+
+        public Player(int playerID, string image, float airFriction, float groundFriction, int tileSize, int offsetX, int offsetY, GameInstance main, int gameWidth) : base(image, 4, 6)
         {
             SetOrigin(width / 2, height / 2);
             this.playerID = playerID;
@@ -86,6 +89,8 @@ namespace GXPEngine
             ceilingCheck.SetOrigin(ceilingCheck.width / 2, ceilingCheck.height / 2);
             //groundCheck.collider.isTrigger = true;
             ceilingCheck.SetXY(0, -height / 2);
+
+            SetCycle(4, 4, 8);
         }
 
         public void setMovementValues(float gravity, float movementForce, float jumpForce)
@@ -149,6 +154,7 @@ namespace GXPEngine
         public void UpdateInput(int up, int left, int down, int right, int dig, int bomb)
         {
 
+            bool isMoving = false;
             bool alreadyDug = false;
 
             if (!grounded)
@@ -169,10 +175,15 @@ namespace GXPEngine
             if (Input.GetKey(right))
             {
                 velocityX += movementForce * Time.deltaTime;
+                direction = 1;
+                SetCycle(0 + 12 * direction, 4);
+                isMoving = true;
 
                 if (Input.GetKeyDown(dig))
                 {
                     main.DigTile(tileX + 1, tileY, playerID, offsetX);
+                    SetCycle(8 + 12 * direction, 1);
+                    diggingDelay = 16;
                     alreadyDug = true;
                 }
             }
@@ -180,10 +191,15 @@ namespace GXPEngine
             if (Input.GetKey(left))
             {
                 velocityX -= movementForce * Time.deltaTime;
+                direction = 0;
+                SetCycle(0 + 12 * direction, 4);
+                isMoving = true;
 
                 if (Input.GetKeyDown(dig))
                 {
                     main.DigTile(tileX - 1, tileY, playerID, offsetX);
+                    SetCycle(8 + 12 * direction, 1);
+                    diggingDelay = 16;
                     alreadyDug = true;
                 }
             }
@@ -203,6 +219,9 @@ namespace GXPEngine
             if (Input.GetKeyDown(dig) && !alreadyDug)
             {
                 main.DigTile(tileX, tileY + 1, playerID, offsetX);
+                SetCycle(8 + 12 * direction, 1);
+                diggingDelay = 16;
+                alreadyDug = true;
             }
 
             if (Input.GetKeyDown(bomb) && bombs > 0)
@@ -211,6 +230,18 @@ namespace GXPEngine
                 bombs--;
             }
 
+
+            if(!isMoving && !alreadyDug)
+            {
+                SetCycle(4 + 12 * direction, 4);
+            }
+
+            if (diggingDelay > 0)
+            {
+                diggingDelay--;
+                SetCycle(8 + 12 * direction, 1);
+            }
+            AnimateFixed();
         }
 
     }

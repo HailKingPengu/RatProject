@@ -27,11 +27,18 @@ namespace GXPEngine.UI
             AddChild(mainMenu);
 
             Menu optionsMenu = new Menu("PauseMenu.png", screenWidth, screenHeight);
+            optionsMenu.AddButton(new Button("button.png", 300, 300, 64, 64, new int[] { 0, 0 }, this));
+            optionsMenu.AddButton(new Button("button.png", 450, 300, 64, 64, new int[] { 0, 0 }, this));
             menus.Add(optionsMenu);
             //AddChild(optionsMenu);
 
-            this.main = main;
+            Menu controlMenu = new Menu("ControlMenu.png", screenWidth, screenHeight);
+            controlMenu.AddButton(new Button("button.png", 150, 300, 64, 64, new int[] { 0, 0 }, this));
+            menus.Add(controlMenu);
 
+            this.main = main;
+            
+            menus[currentMenu].NextButton();
         }
 
         public void LoadScene(int scene)
