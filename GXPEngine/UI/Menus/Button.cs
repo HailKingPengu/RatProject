@@ -16,12 +16,13 @@ namespace GXPEngine.UI.Menus
         //function is an array with length two: first int is function, second int is what is Affected
 
         //button has three states: idle, selected and pressed
-        public Button(String image, int x, int y, int width, int height, int[] function, MenuHandler menuHandler) : base(image, 3, 1)
+        public Button(String image, int x, int y, float scale, int[] function, MenuHandler menuHandler) : base(image, 2, 1)
         {
             this.x = x;
             this.y = y;
 
-            this.SetScaleXY(width / this.width, height / this.height);
+            SetOrigin(width/2, height/2);
+            this.scale = scale;
 
             this.function = function;
             this.menuHandler = menuHandler;

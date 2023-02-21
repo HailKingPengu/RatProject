@@ -20,20 +20,20 @@ namespace GXPEngine.UI
         public MenuHandler(int screenWidth, int screenHeight, Digging main) 
         {
             Menu mainMenu = new Menu("StartPage.png", screenWidth, screenHeight);
-            mainMenu.AddButton(new Button("button.png", 150, 300, 64, 64, new int[] { 0, 1 }, this));
-            mainMenu.AddButton(new Button("button.png", 300, 300, 64, 64, new int[] { 0, -1 }, this));
-            mainMenu.AddButton(new Button("button.png", 450, 300, 64, 64, new int[] { 0, 2 }, this));
+            mainMenu.AddButton(new Button("OptionsButton.png", screenWidth/2, 420, 0.7f, new int[] { 0, 1 }, this));
+            mainMenu.AddButton(new Button("PlayButton.png", screenWidth / 2, 530, 0.7f, new int[] { 0, -1 }, this));
+            mainMenu.AddButton(new Button("ControlsButton.png", screenWidth / 2, 640, 0.5f, new int[] { 0, 2 }, this));
             menus.Add(mainMenu);
             AddChild(mainMenu);
 
-            Menu optionsMenu = new Menu("PauseMenu.png", screenWidth, screenHeight);
-            optionsMenu.AddButton(new Button("button.png", 300, 300, 64, 64, new int[] { 0, 0 }, this));
-            optionsMenu.AddButton(new Button("button.png", 450, 300, 64, 64, new int[] { 0, 0 }, this));
+            Menu optionsMenu = new Menu("StartPage.png", screenWidth, screenHeight);
+            optionsMenu.AddButton(new Button("button.png", 300, 300, 1, new int[] { 0, 0 }, this));
+            optionsMenu.AddButton(new Button("button.png", 450, 300, 1, new int[] { 0, 0 }, this));
             menus.Add(optionsMenu);
             //AddChild(optionsMenu);
 
-            Menu controlMenu = new Menu("ControlMenu.png", screenWidth, screenHeight);
-            controlMenu.AddButton(new Button("button.png", 150, 300, 64, 64, new int[] { 0, 0 }, this));
+            Menu controlMenu = new Menu("StartPage.png", screenWidth, screenHeight);
+            controlMenu.AddButton(new Button("button.png", 150, 300, 1, new int[] { 0, 0 }, this));
             menus.Add(controlMenu);
 
             this.main = main;

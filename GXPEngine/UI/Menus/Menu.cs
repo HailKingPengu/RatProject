@@ -20,7 +20,7 @@ namespace GXPEngine.UI.Menus
         public Menu(String background, int screenWidth, int screenHeight) 
         { 
             this.background = new Sprite(background, false, false);
-            this.background.SetScaleXY((float)screenWidth / (float)this.background.width, (float)screenHeight / (float)this.background.height);
+            //this.background.SetScaleXY((float)screenWidth / (float)this.background.width, (float)screenHeight / (float)this.background.height);
             AddChild(this.background);
 
             buttons = new List<Button>();

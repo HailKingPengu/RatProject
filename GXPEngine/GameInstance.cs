@@ -55,6 +55,13 @@ namespace GXPEngine
         Sprite background3;
         Sprite background4;
 
+
+        Sound digSound;
+        Sound stoneSound;
+        Sound explosionSound;
+        Sound failSound;
+
+
         public bool paused = false;
 
         public GameInstance(int screenWidth, int screenHeight, string backgroundImage) 
@@ -109,6 +116,13 @@ namespace GXPEngine
 
             uiHandler = new UIHandler(player1, player2);
             AddChild(uiHandler);
+
+
+            digSound = new Sound("dig.ogg");
+            stoneSound = new Sound("stoneDig.ogg");
+            explosionSound = new Sound("explosion.ogg");
+            failSound = new Sound("fail.ogg");
+
 
             Console.WriteLine("MyGame initialized");
         }
@@ -198,6 +212,7 @@ namespace GXPEngine
                         terrain.UpdateTerrain(camY1, true);
 
                         SpawnDigParticles(x * tileSize + tileSize / 2 + offsetX, y * tileSize);
+                        digSound.Play();
 
                         screenShake1 = 1;
                     }
@@ -207,6 +222,8 @@ namespace GXPEngine
                         terrain.UpdateTerrain(camY1, true);
 
                         SpawnStoneSparkParticles(x* tileSize +tileSize / 2 + offsetX, y* tileSize);
+                        digSound.Play();
+                        stoneSound.Play();
 
                         screenShake1 = 5;
                     }
@@ -216,8 +233,14 @@ namespace GXPEngine
                         terrain.UpdateTerrain(camY1, true);
 
                         SpawnStoneParticles(x * tileSize + tileSize / 2 + offsetX, y * tileSize);
+                        digSound.Play();
+                        stoneSound.Play();
 
                         screenShake1 = 3;
+                    }
+                    else if (terrain.terrainData[x, y] > 3 && terrain.terrainData[x, y] < 8)
+                    {
+                        failSound.Play();
                     }
                 }
             }
@@ -231,6 +254,7 @@ namespace GXPEngine
                         terrain2.UpdateTerrain(camY2, true);
 
                         SpawnDigParticles(x * tileSize + tileSize / 2 + offsetX, y * tileSize);
+                        digSound.Play();
 
                         screenShake2 = 1;
                     }
@@ -240,6 +264,8 @@ namespace GXPEngine
                         terrain2.UpdateTerrain(camY2, true);
 
                         SpawnStoneSparkParticles(x * tileSize + tileSize / 2 + offsetX, y * tileSize);
+                        digSound.Play();
+                        stoneSound.Play();
 
                         screenShake2 = 5;
                     }
@@ -249,8 +275,14 @@ namespace GXPEngine
                         terrain2.UpdateTerrain(camY2, true);
 
                         SpawnStoneParticles(x * tileSize + tileSize / 2 + offsetX, y * tileSize);
+                        digSound.Play();
+                        stoneSound.Play();
 
                         screenShake2 = 3;
+                    }
+                    else if (terrain2.terrainData[x, y] > 3 && terrain2.terrainData[x, y] < 8)
+                    {
+                        failSound.Play();
                     }
                 }
             }
@@ -270,6 +302,7 @@ namespace GXPEngine
                         }
                     }
                 }
+                explosionSound.Play();
                 screenShake1 = 20;
                 terrain.UpdateTerrain(camY1, true);
             }
@@ -285,6 +318,7 @@ namespace GXPEngine
                         }
                     }
                 }
+                explosionSound.Play();
                 screenShake2 = 20;
                 terrain2.UpdateTerrain(camY2, true);
             }
