@@ -33,6 +33,7 @@ public class Digging : Game
 
         AddChild(game);
         game.paused = false;
+        //game.StartGame();
     }
 
     static void Main()                          // Main() is the first method that's called when the program is run

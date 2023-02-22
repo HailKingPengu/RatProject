@@ -50,6 +50,12 @@ namespace GXPEngine
         LightingOverlay lightingOverlay1;
         LightingOverlay lightingOverlay2;
 
+        Sprite depthMeter;
+        Sprite depthMeter2;
+
+        Sprite p1DepthIndicator;
+        Sprite p2DepthIndicator;
+
         Sprite background1;
         Sprite background2;
         Sprite background3;
@@ -114,6 +120,22 @@ namespace GXPEngine
             lightingOverlay1.AddLightSource(player1, 12);
             lightingOverlay2.AddLightSource(player2, 12);
 
+            depthMeter = new Sprite("DepthMeter.png", false, false);
+            AddChild(depthMeter);
+            depthMeter2 = new Sprite("DepthMeter.png", false, false);
+            depthMeter2.x = 1492 - depthMeter2.width;
+            AddChild(depthMeter2);
+
+            p1DepthIndicator = new Sprite("P1DepthIndicator.png", false, false);
+            p1DepthIndicator.SetOrigin(p1DepthIndicator.width/2, p1DepthIndicator.height/2);
+            p1DepthIndicator.x = screenWidth / 2;
+            AddChild(p1DepthIndicator);
+
+            p2DepthIndicator = new Sprite("P2DepthIndicator.png", false, false);
+            p2DepthIndicator.SetOrigin(p2DepthIndicator.width / 2, p2DepthIndicator.height / 2);
+            p2DepthIndicator.x = 1150 - screenWidth / 4;
+            AddChild(p2DepthIndicator);
+
             uiHandler = new UIHandler(player1, player2);
             AddChild(uiHandler);
 
@@ -128,6 +150,11 @@ namespace GXPEngine
         }
 
         void Restart()
+        {
+
+        }
+
+        public void StartGame()
         {
 
         }
@@ -169,6 +196,12 @@ namespace GXPEngine
 
                 lightingOverlay2.UpdateOverlay(player2.y / tileSize);
                 lightingOverlay2.SetXY(1150 - screenWidth / 4, -camY2);
+
+                depthMeter.y = -camY1;
+                depthMeter2.y = -camY2;
+
+                p1DepthIndicator.y = -camY1 + 30 + ((player1.y / tileSize) / 200 * 620);
+                p2DepthIndicator.y = -camY2 + 30 + ((player2.y / tileSize) / 200 * 620);
 
                 UpdateScreenShake();
             }
