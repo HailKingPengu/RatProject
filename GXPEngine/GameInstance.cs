@@ -110,7 +110,7 @@ namespace GXPEngine
             AddChild(background4);
 
             mapWidth = screenWidth / tileSize + 1;
-            mapHeight = 200;
+            mapHeight = 170;
 
             player1 = new Player(0, "molesprite-SheetSML.png", 1.02f, 1.1f, tileSize, 0, offsetY, this, screenWidth/2);
             player1.SetXY(screenWidth / 4, -100);
@@ -272,8 +272,8 @@ namespace GXPEngine
                 p1DepthIndicator.x = -x + screenWidth / 2;
                 p2DepthIndicator.x = p2Camera.x - screenWidth / 4;
 
-                p1DepthIndicator.y = -y + 30 + ((player1.y / tileSize) / 200 * 620);
-                p2DepthIndicator.y = p2Camera.y - screenHeight/2 + 30 + ((player2.y / tileSize) / 200 * 620);
+                p1DepthIndicator.y = -y + 30 + ((player1.y / tileSize) / 150 * 620);
+                p2DepthIndicator.y = p2Camera.y - screenHeight/2 + 30 + ((player2.y / tileSize) / 150 * 620);
 
 
                 bombIcon1.SetXY(-x + 30, -y + 30);
@@ -294,13 +294,13 @@ namespace GXPEngine
                     main.PauseGame();
                 }
 
-                if (player1.y > 190 * tileSize)
+                if (player1.y > 160 * tileSize)
                 //if (player1.y > 20 * tileSize)
                 {
                     RemoveChild(p2Camera);
                     main.GameOver(player1.playerID);
                 }
-                if (player2.y > 190 * tileSize)
+                if (player2.y > 160 * tileSize)
                 //if (player2.y > 20 * tileSize)
                 {
                     RemoveChild(p2Camera);

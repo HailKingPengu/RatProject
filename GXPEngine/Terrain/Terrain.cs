@@ -20,7 +20,7 @@ namespace GXPEngine
 
         public AnimationSprite[,] tiles;
 
-        DynamitePickup[] dynamitePickups = new DynamitePickup[5];
+        DynamitePickup[] dynamitePickups = new DynamitePickup[12];
 
         public Terrain(int mapWidth, int mapHeight, int screenWidth, int screenHeight, int tileSize, int offsetX, int offsetY)
         {
@@ -56,11 +56,11 @@ namespace GXPEngine
                     //    terrainData[x, y] += 4;
                     //}
 
-                    if (Utils.Random(0, Convert.ToInt32(15 - (3 / 2) * Math.Sqrt(y))) == 1)
+                    if (Utils.Random(0, Convert.ToInt32(14 - (3 / 2) * Math.Sqrt(y))) == 1)
                     {
                         terrainData[x, y] += 4;
                     }
-                    else if (Utils.Random(0, Convert.ToInt32(15 - (3 / 2) * Math.Sqrt(y))) == 1)
+                    else if (Utils.Random(0, Convert.ToInt32(13 - (3 / 2) * Math.Sqrt(y))) == 1)
                     {
                         terrainData[x, y] += 8;
                     }
