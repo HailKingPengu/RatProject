@@ -42,7 +42,7 @@ namespace GXPEngine
 
         public float cooldown = 1;
 
-        public int bombs = 333;
+        public int bombs = 3;
 
         public int gameWidth;
 
