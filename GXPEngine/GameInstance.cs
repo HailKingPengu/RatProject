@@ -1,6 +1,7 @@
 ﻿using GXPEngine.Particles;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,6 +57,14 @@ namespace GXPEngine
         Sprite p1DepthIndicator;
         Sprite p2DepthIndicator;
 
+        Sprite bombIcon1;
+        Sprite bombIcon2;
+
+        EasyDraw bombCount1;
+        EasyDraw bombCount2;
+
+        string gameFont = "Machine Gunk.otf";
+
         AnimationSprite startNumbers;
         AnimationSprite startNumbers2;
 
@@ -71,9 +80,9 @@ namespace GXPEngine
         Sound failSound;
 
 
-        public float[] volumes = new float[2];
+        public float[] volumes = new float[] {0.5f, 0.5f};
 
-        float MusicVolume;
+        float MusicVolume = 0.5f;
 
 
         public bool paused = false;
@@ -152,6 +161,19 @@ namespace GXPEngine
             uiHandler = new UIHandler(player1, player2);
             AddChild(uiHandler);
 
+            bombIcon1 = new Sprite("tnt.png", false, false);
+            AddChild(bombIcon1);
+            bombIcon2 = new Sprite("tnt.png", false, false);
+            AddChild(bombIcon2);
+
+            bombCount1 = new EasyDraw(300, 100, false);
+            bombCount1.TextFont(Utils.LoadFont(gameFont, 40));
+            bombCount1.TextAlign(CenterMode.Min, CenterMode.Center);
+            AddChild(bombCount1);
+            bombCount2 = new EasyDraw(300, 100, false);
+            bombCount2.TextFont(Utils.LoadFont(gameFont, 40));
+            bombCount2.TextAlign(CenterMode.Max, CenterMode.Center);
+            AddChild(bombCount2);
 
             digSound = new Sound("dig.ogg");
             stoneSound = new Sound("stoneDig.ogg");
@@ -239,13 +261,32 @@ namespace GXPEngine
                 lightingOverlay2.UpdateOverlay(player2.y / tileSize);
                 lightingOverlay2.SetXY(1150 - screenWidth / 4, -camY2);
 
-                depthMeter.y = -camY1;
-                depthMeter2.y = -camY2;
-
-                p1DepthIndicator.y = -camY1 + 30 + ((player1.y / tileSize) / 200 * 620);
-                p2DepthIndicator.y = -camY2 + 30 + ((player2.y / tileSize) / 200 * 620);
-
                 UpdateScreenShake();
+
+
+                //BAZINGA
+
+                depthMeter.SetXY(-x, -y);
+                depthMeter2.SetXY(p2Camera.x - screenWidth * 3 / 4, p2Camera.y- screenHeight/2);
+
+                p1DepthIndicator.x = -x + screenWidth / 2;
+                p2DepthIndicator.x = p2Camera.x - screenWidth / 4;
+
+                p1DepthIndicator.y = -y + 30 + ((player1.y / tileSize) / 200 * 620);
+                p2DepthIndicator.y = p2Camera.y - screenHeight/2 + 30 + ((player2.y / tileSize) / 200 * 620);
+
+
+                bombIcon1.SetXY(-x + 30, -y + 30);
+                bombIcon2.SetXY(p2Camera.x + screenWidth / 4 - 64 - 30, p2Camera.y - screenHeight / 2 + 30);
+
+                bombCount1.SetXY(-x + 100, -y + 20);
+                bombCount2.SetXY(p2Camera.x + screenWidth / 4 - 64 - 340, p2Camera.y - screenHeight / 2 + 20);
+
+                bombCount1.ClearTransparent();
+                bombCount1.Text(player1.bombs.ToString());
+                bombCount2.ClearTransparent();
+                bombCount2.Text(player2.bombs.ToString());
+
 
                 if (Input.GetKeyDown(Key.K))
                 {

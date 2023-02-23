@@ -20,6 +20,8 @@ namespace GXPEngine
 
         public AnimationSprite[,] tiles;
 
+        DynamitePickup[] dynamitePickups = new DynamitePickup[5];
+
         public Terrain(int mapWidth, int mapHeight, int screenWidth, int screenHeight, int tileSize, int offsetX, int offsetY)
         {
             x = offsetX;
@@ -68,6 +70,28 @@ namespace GXPEngine
                 }
             }
 
+            for (int i = 0; i < dynamitePickups.Length; i++)
+            {
+                int pickupX = Utils.Random(1, mapWidth);
+                int pickupY = Utils.Random(1, mapHeight - 80);
+
+                while (terrainData[pickupX, pickupY] > 3)
+                {
+                    pickupX = Utils.Random(1, mapWidth);
+                    pickupY = Utils.Random(1, mapHeight - 80);
+                }
+
+                dynamitePickups[i] = new DynamitePickup();
+                dynamitePickups[i].SetXY(pickupX * tileSize, pickupY * tileSize);
+
+                dynamitePickups[i].SetXY(pickupX * tileSize + tileSize/5, 0);
+
+                dynamitePickups[i].pickupDepth = pickupY * tileSize + tileSize / 5;
+                AddChild(dynamitePickups[i]);
+
+
+
+            }
 
 
             //for (int x = 0; x < mapWidth; x++)
@@ -124,6 +148,14 @@ namespace GXPEngine
                     }
                 }
             }
+
+            for (int i = 0; i < dynamitePickups.Length; i++)
+            {
+
+                dynamitePickups[i].y = dynamitePickups[i].pickupDepth - offsetY * tileSize - tileSize / 2;
+
+            }
+
         }
 
 

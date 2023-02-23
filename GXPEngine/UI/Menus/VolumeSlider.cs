@@ -56,6 +56,7 @@ namespace GXPEngine.UI.Menus
             if (value < 1)
             {
                 value += 0.1f;
+                value = Mathf.Clamp(value, 0, 1);
                 gameInstance.volumes[id] = value;
                 slider.SetXY(683 - 140 + 290 * value, 384 + offsetY);
             }
@@ -68,6 +69,7 @@ namespace GXPEngine.UI.Menus
             if (value > 0)
             {
                 value -= 0.1f;
+                value = Mathf.Clamp(value, 0, 1);
                 gameInstance.volumes[id] = value;
                 slider.SetXY(683 - 140 + 290 * value, 384 + offsetY);
             }

@@ -42,7 +42,7 @@ namespace GXPEngine
 
         public float cooldown = 1;
 
-        public int bombs = 10;
+        public int bombs = 3;
 
         public int gameWidth;
 
@@ -142,6 +142,15 @@ namespace GXPEngine
             if (GetCollisions(false).Length > 2)
             {
                 x -= velocityX;
+            }
+
+            if (GetCollisions(true, false).Length > 1)
+            {
+                if (GetCollisions(true, false)[0] is DynamitePickup)
+                {
+                    GetCollisions(true, false)[0].Destroy();
+                    bombs++;
+                }
             }
 
             //x = Mathf.Clamp(x, 0, gameWidth);
