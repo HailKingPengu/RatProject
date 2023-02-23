@@ -22,7 +22,7 @@ namespace GXPEngine.UI
             Menu mainMenu = new Menu("StartPage.png", screenWidth, screenHeight, main);
             mainMenu.AddButton(new Button(0, "PlayButton.png", screenWidth / 2, 420, 0.7f, new int[] { 0, -1 }, this));
             mainMenu.AddButton(new Button(1, "OptionsButton.png", screenWidth/2, 530, 0.7f, new int[] { 0, 1 }, this));
-            mainMenu.AddButton(new Button(2, "ControlsButton.png", screenWidth / 2, 640, 0.5f, new int[] { 0, 2 }, this));
+            mainMenu.AddButton(new Button(2, "HowToButton.png", screenWidth / 2, 620, 0.5f, new int[] { 0, 2 }, this));
             mainMenu.Initialize();
             menus.Add(mainMenu);
             AddChild(mainMenu);
@@ -34,10 +34,11 @@ namespace GXPEngine.UI
             optionsMenu.Initialize();
             menus.Add(optionsMenu);
 
-            Menu controlMenu = new Menu("StartPage.png", screenWidth, screenHeight, main);
-            controlMenu.AddButton(new Button(0, "BackButton.png", screenWidth / 2, 680, 1, new int[] { 0, 0 }, this));
-            controlMenu.Initialize();
-            menus.Add(controlMenu);
+            Menu howToMenu = new Menu("HowToMenu.png", screenWidth, screenHeight, main);
+            howToMenu.AddButton(new Button(0, "ControlsButton.png", screenWidth / 2 - 200, 650, 0.5f, new int[] { 0, 7 }, this));
+            howToMenu.AddButton(new Button(1, "BackButton.png", screenWidth / 2 + 200, 650, 1, new int[] { 0, 0 }, this));
+            howToMenu.Initialize();
+            menus.Add(howToMenu);
 
             Menu pauseMenu = new Menu("PausingMenu.png", screenWidth, screenHeight, main);
             pauseMenu.AddButton(new Button(0, "OptionsButton.png", screenWidth / 2, 340, 0.7f, new int[] { 0, 4 }, this));
@@ -61,6 +62,11 @@ namespace GXPEngine.UI
             GameOverMenu.AddButton(new Button(0, "PlayAgainButton.png", screenWidth / 2, 340, 0.7f, new int[] { 0, -1 }, this));
             GameOverMenu.AddButton(new Button(1, "MainMenuButton.png", screenWidth / 2, 550, 1, new int[] { 0, 0 }, this));
             menus.Add(GameOverMenu);
+
+            Menu controlMenu = new Menu("ControlMenu.png", screenWidth, screenHeight, main);
+            controlMenu.AddButton(new Button(0, "BackButton.png", screenWidth / 2, 680, 1, new int[] { 0, 2 }, this));
+            controlMenu.Initialize();
+            menus.Add(controlMenu);
 
             this.main = main;
             
