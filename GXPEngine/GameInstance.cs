@@ -112,11 +112,11 @@ namespace GXPEngine
             mapWidth = screenWidth / tileSize + 1;
             mapHeight = 200;
 
-            player1 = new Player(0, "Zoolander-SheetSML.png", 1.02f, 1.1f, tileSize, 0, offsetY, this, screenWidth/2);
+            player1 = new Player(0, "molesprite-SheetSML.png", 1.02f, 1.1f, tileSize, 0, offsetY, this, screenWidth/2);
             player1.SetXY(screenWidth / 4, -100);
             player1.setMovementValues(gravity, movementForce, jumpForce);
 
-            player2 = new Player(1, "molesprite-SheetSML.png", 1.02f, 1.1f, tileSize, 800,  offsetY, this, screenWidth/2);
+            player2 = new Player(1, "Zoolander-SheetSML.png", 1.02f, 1.1f, tileSize, 800,  offsetY, this, screenWidth/2);
             player2.SetXY(126 + 3 * screenWidth / 4, -100);
             player2.setMovementValues(gravity, movementForce, jumpForce);
 
@@ -148,12 +148,12 @@ namespace GXPEngine
             depthMeter2.x = 1492 - depthMeter2.width;
             AddChild(depthMeter2);
 
-            p1DepthIndicator = new Sprite("P1DepthIndicator.png", false, false);
+            p1DepthIndicator = new Sprite("P2DepthIndicator.png", false, false);
             p1DepthIndicator.SetOrigin(p1DepthIndicator.width/2, p1DepthIndicator.height/2);
             p1DepthIndicator.x = screenWidth / 2;
             AddChild(p1DepthIndicator);
 
-            p2DepthIndicator = new Sprite("P2DepthIndicator.png", false, false);
+            p2DepthIndicator = new Sprite("P1DepthIndicator.png", false, false);
             p2DepthIndicator.SetOrigin(p2DepthIndicator.width / 2, p2DepthIndicator.height / 2);
             p2DepthIndicator.x = 1150 - screenWidth / 4;
             AddChild(p2DepthIndicator);
