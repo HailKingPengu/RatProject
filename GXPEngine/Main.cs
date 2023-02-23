@@ -54,7 +54,16 @@ public class Digging : Game
         game.AddChild(game.p2Camera);
     }
 
-    public void GameOver(int winnerID)
+    public void RestartGame()
+    {
+        RemoveChild(menus);
+        menus.isActive = false;
+        menus.RemoveChild(menus.menus[menus.currentMenu]);
+        game.StartGame();
+        game.paused = false;
+    }
+
+    public void GameOver()
     {
         AddChildAt(menus, 1);
         menus.isActive = true;

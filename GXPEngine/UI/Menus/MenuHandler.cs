@@ -60,7 +60,6 @@ namespace GXPEngine.UI
             Menu GameOverMenu = new Menu("GameOverMenu.png", screenWidth, screenHeight, main);
             GameOverMenu.AddButton(new Button(0, "PlayAgainButton.png", screenWidth / 2, 340, 0.7f, new int[] { 0, -1 }, this));
             GameOverMenu.AddButton(new Button(1, "MainMenuButton.png", screenWidth / 2, 550, 1, new int[] { 0, 0 }, this));
-            GameOverMenu.Initialize();
             menus.Add(GameOverMenu);
 
             this.main = main;
@@ -80,6 +79,11 @@ namespace GXPEngine.UI
             if (scene == -2)
             {
                 main.ResumeGame();
+            }
+
+            if (scene == -3)
+            {
+                main.RestartGame();
             }
 
             if (scene >= 0)

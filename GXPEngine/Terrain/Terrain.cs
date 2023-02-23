@@ -60,7 +60,7 @@ namespace GXPEngine
                     {
                         terrainData[x, y] += 4;
                     }
-                    else if (Utils.Random(0, Convert.ToInt32(13 - (3 / 2) * Math.Sqrt(y))) == 1)
+                    else if (Utils.Random(0, Convert.ToInt32(14 - (3 / 2) * Math.Sqrt(y))) == 1)
                     {
                         terrainData[x, y] += 8;
                     }
@@ -73,12 +73,12 @@ namespace GXPEngine
             for (int i = 0; i < dynamitePickups.Length; i++)
             {
                 int pickupX = Utils.Random(1, mapWidth);
-                int pickupY = Utils.Random(1, mapHeight - 80);
+                int pickupY = Utils.Random(1, mapHeight - 40);
 
                 while (terrainData[pickupX, pickupY] > 3)
                 {
                     pickupX = Utils.Random(1, mapWidth);
-                    pickupY = Utils.Random(1, mapHeight - 80);
+                    pickupY = Utils.Random(1, mapHeight - 40);
                 }
 
                 dynamitePickups[i] = new DynamitePickup();

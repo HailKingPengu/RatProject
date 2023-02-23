@@ -68,6 +68,8 @@ namespace GXPEngine
         AnimationSprite startNumbers;
         AnimationSprite startNumbers2;
 
+        AnimationSprite gameOverScreen;
+
         Sprite background1;
         Sprite background2;
         Sprite background3;
@@ -87,15 +89,24 @@ namespace GXPEngine
 
         public bool paused = false;
         bool starting = false;
+        bool stopping = false;
 
         int startCounter;
+        int stopCounter;
 
         Digging main;
 
         public GameInstance(int screenWidth, int screenHeight, string backgroundImage, Digging main) 
         {
+            InitializeGame(screenWidth, screenHeight, backgroundImage, main);
+        }
+
+        public void InitializeGame(int screenWidth, int screenHeight, string backgroundImage, Digging main)
+        {
             this.screenWidth = screenWidth;
             this.screenHeight = screenHeight;
+
+            x = 0;
 
             //FIX THIS
             //if time: scrolling background
@@ -112,11 +123,11 @@ namespace GXPEngine
             mapWidth = screenWidth / tileSize + 1;
             mapHeight = 170;
 
-            player1 = new Player(0, "molesprite-SheetSML.png", 1.02f, 1.1f, tileSize, 0, offsetY, this, screenWidth/2);
-            player1.SetXY(screenWidth / 4, -100);
+            player1 = new Player(0, "molesprite-SheetSML.png", 1.02f, 1.1f, tileSize, 0, offsetY, this, screenWidth / 2);
+            player1.SetXY(screenWidth / 4 + 10, -100);
             player1.setMovementValues(gravity, movementForce, jumpForce);
 
-            player2 = new Player(1, "Zoolander-SheetSML.png", 1.02f, 1.1f, tileSize, 800,  offsetY, this, screenWidth/2);
+            player2 = new Player(1, "Zoolander-SheetSML.png", 1.02f, 1.1f, tileSize, 800, offsetY, this, screenWidth / 2);
             player2.SetXY(126 + 3 * screenWidth / 4, -100);
             player2.setMovementValues(gravity, movementForce, jumpForce);
 
@@ -126,10 +137,10 @@ namespace GXPEngine
             AddChild(player1);
             AddChild(player2);
 
-            terrain = new Terrain(mapWidth/2, mapHeight, screenWidth/2, screenHeight, tileSize, 0, offsetY);
+            terrain = new Terrain(mapWidth / 2, mapHeight, screenWidth / 2, screenHeight, tileSize, 0, offsetY);
             AddChild(terrain);
 
-            terrain2 = new Terrain(mapWidth/2, mapHeight, screenWidth/2, screenHeight, tileSize, 800, offsetY);
+            terrain2 = new Terrain(mapWidth / 2, mapHeight, screenWidth / 2, screenHeight, tileSize, 800, offsetY);
             AddChild(terrain2);
 
             lightingOverlay1 = new LightingOverlay(screenWidth / 2, screenHeight);
@@ -149,7 +160,7 @@ namespace GXPEngine
             AddChild(depthMeter2);
 
             p1DepthIndicator = new Sprite("P2DepthIndicator.png", false, false);
-            p1DepthIndicator.SetOrigin(p1DepthIndicator.width/2, p1DepthIndicator.height/2);
+            p1DepthIndicator.SetOrigin(p1DepthIndicator.width / 2, p1DepthIndicator.height / 2);
             p1DepthIndicator.x = screenWidth / 2;
             AddChild(p1DepthIndicator);
 
@@ -185,18 +196,76 @@ namespace GXPEngine
             startNumbers2 = new AnimationSprite("StartNumbers.png", 4, 1);
             startNumbers2.x = 126 + screenWidth / 4;
 
+            gameOverScreen = new AnimationSprite("GameOverScreen.png", 2, 1);
+
             this.main = main;
 
             Console.WriteLine("MyGame initialized");
         }
 
-        void Restart()
+        public void DestroyEverything()
         {
+            y = 0;
 
+            //FIX THIS
+            //if time: scrolling background
+            background1.Destroy();
+            background2.Destroy();
+            background3.Destroy();
+            background4.Destroy();
+
+            mapWidth = screenWidth / tileSize + 1;
+            mapHeight = 170;
+
+            player1.Destroy();
+
+            player2.Destroy();
+
+            p2Camera.Destroy();
+
+            terrain.Destroy();
+
+            terrain2.Destroy();
+
+            lightingOverlay1.Destroy();
+            lightingOverlay2.Destroy();
+
+            depthMeter.Destroy();
+            depthMeter2.Destroy();
+
+            p1DepthIndicator.Destroy();
+
+            p2DepthIndicator.Destroy();
+
+            uiHandler.Destroy();
+
+            bombIcon1.Destroy();
+            bombIcon2.Destroy();
+
+            bombCount1.Destroy();
+            bombCount2.Destroy();
+
+            startNumbers.Destroy();
+            startNumbers2.Destroy();
+
+            gameOverScreen.Destroy();
+
+            startCounter = 0;
+            stopCounter = 0;
         }
 
         public void StartGame()
         {
+            DestroyEverything();
+            InitializeGame(screenWidth, screenHeight, "backGround.png", main);
+
+            player1.y = -100;
+            y = 0;
+            camY1 = 0;
+            camY2 = 0;
+            screenShake1 = 0;
+            screenShake2 = 0;
+
             paused = false;
             Update();
             paused = true;
@@ -205,6 +274,16 @@ namespace GXPEngine
 
             AddChild(startNumbers);
             AddChild(startNumbers2);
+        }
+
+        public void StopGame(int winnerID)
+        {
+            paused = true;
+            stopping = true;
+            RemoveChild(p2Camera);
+            AddChildAt(gameOverScreen, 1000000);
+            gameOverScreen.SetXY(-x, -y);
+            gameOverScreen.currentFrame = winnerID;
         }
 
         void Update()
@@ -222,6 +301,17 @@ namespace GXPEngine
                     RemoveChild(startNumbers2);
                     starting = false;
                     paused = false;
+                }
+            }
+
+            if (stopping)
+            {
+                stopCounter += Time.deltaTime;
+
+                if (stopCounter > 3000)
+                {
+                    main.GameOver();
+                    stopping = false;
                 }
             }
 
@@ -297,14 +387,12 @@ namespace GXPEngine
                 if (player1.y > 160 * tileSize)
                 //if (player1.y > 20 * tileSize)
                 {
-                    RemoveChild(p2Camera);
-                    main.GameOver(player1.playerID);
+                    StopGame(player1.playerID);
                 }
                 if (player2.y > 160 * tileSize)
                 //if (player2.y > 20 * tileSize)
                 {
-                    RemoveChild(p2Camera);
-                    main.GameOver(player2.playerID);
+                    StopGame(player2.playerID);
                 }
             }
 
