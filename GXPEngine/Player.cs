@@ -46,6 +46,9 @@ namespace GXPEngine
 
         public int gameWidth;
 
+        bool goingToExplode;
+        int explosionTimer;
+
         Sprite light;
 
         public int playerID;
@@ -164,97 +167,114 @@ namespace GXPEngine
         public void UpdateInput(int up, int left, int down, int right, int dig, int bomb)
         {
 
-            bool isMoving = false;
-            bool alreadyDug = false;
-
-            if (!grounded)
+            if (!goingToExplode)
             {
-                velocityY += gravity * Time.deltaTime;
+                bool isMoving = false;
+                bool alreadyDug = false;
+
+                if (!grounded)
+                {
+                    velocityY += gravity * Time.deltaTime;
+                }
+                else
+                {
+                    velocityY = 0;
+                }
+
+                //if (player.GetCollisions().Length != 0)
+                //{
+                //    player.velocityY = 0;
+                //}
+
+                //a
+                if (Input.GetKey(right))
+                {
+                    velocityX += movementForce * Time.deltaTime;
+                    direction = 1;
+                    SetCycle(0 + 12 * direction, 4);
+                    isMoving = true;
+
+                    if (Input.GetKeyDown(dig))
+                    {
+                        main.DigTile(tileX + 1, tileY, playerID, offsetX);
+                        SetCycle(8 + 12 * direction, 1);
+                        sidewaysDiggingDelay = 16;
+                        alreadyDug = true;
+                    }
+                }
+                //d
+                if (Input.GetKey(left))
+                {
+                    velocityX -= movementForce * Time.deltaTime;
+                    direction = 0;
+                    SetCycle(0 + 12 * direction, 4);
+                    isMoving = true;
+
+                    if (Input.GetKeyDown(dig))
+                    {
+                        main.DigTile(tileX - 1, tileY, playerID, offsetX);
+                        SetCycle(8 + 12 * direction, 1);
+                        sidewaysDiggingDelay = 16;
+                        alreadyDug = true;
+                    }
+                }
+                ////w
+                //if (Input.GetKeyDown(up) && grounded)
+                //{
+                //    y -= 10;
+                //    velocityY -= jumpForce;
+                //    grounded = false;
+                //}
+
+                //if (Input.GetKey(up) && Input.GetKeyDown(dig))
+                //{
+                //    main.DigTile(tileX, tileY - 1);
+                //}
+
+                if (Input.GetKeyDown(dig) && !alreadyDug)
+                {
+                    main.DigTile(tileX, tileY + 1, playerID, offsetX);
+                    SetCycle(8 + 12 * direction, 1);
+                    downDiggingDelay = 16;
+                    alreadyDug = true;
+                }
+
+                if (!isMoving && !alreadyDug)
+                {
+                    SetCycle(4 + 12 * direction, 4);
+                }
+
+                if (sidewaysDiggingDelay > 0)
+                {
+                    sidewaysDiggingDelay--;
+                    SetCycle(8 + 12 * direction, 1);
+                }
+                if (downDiggingDelay > 0)
+                {
+                    downDiggingDelay--;
+                    SetCycle(9 + 12 * direction, 1);
+                }
+
+                if (Input.GetKeyDown(bomb) && bombs > 0)
+                {
+                    goingToExplode = true;
+                    explosionTimer = 0;
+
+                    SetCycle(10 + 12 * direction, 2, 16);
+                }
             }
             else
             {
-                velocityY = 0;
-            }
+                explosionTimer += Time.deltaTime;
 
-            //if (player.GetCollisions().Length != 0)
-            //{
-            //    player.velocityY = 0;
-            //}
-
-            //a
-            if (Input.GetKey(right))
-            {
-                velocityX += movementForce * Time.deltaTime;
-                direction = 1;
-                SetCycle(0 + 12 * direction, 4);
-                isMoving = true;
-
-                if (Input.GetKeyDown(dig))
+                if (explosionTimer > 500)
                 {
-                    main.DigTile(tileX + 1, tileY, playerID, offsetX);
-                    SetCycle(8 + 12 * direction, 1);
-                    sidewaysDiggingDelay = 16;
-                    alreadyDug = true;
+                    explosionTimer = 0;
+                    goingToExplode = false;
+                    main.ExplodeTile(tileX, tileY, playerID, offsetX);
+                    bombs--;
+                    SetCycle(4, 4, 8);
                 }
-            }
-            //d
-            if (Input.GetKey(left))
-            {
-                velocityX -= movementForce * Time.deltaTime;
-                direction = 0;
-                SetCycle(0 + 12 * direction, 4);
-                isMoving = true;
-
-                if (Input.GetKeyDown(dig))
-                {
-                    main.DigTile(tileX - 1, tileY, playerID, offsetX);
-                    SetCycle(8 + 12 * direction, 1);
-                    sidewaysDiggingDelay = 16;
-                    alreadyDug = true;
-                }
-            }
-            ////w
-            //if (Input.GetKeyDown(up) && grounded)
-            //{
-            //    y -= 10;
-            //    velocityY -= jumpForce;
-            //    grounded = false;
-            //}
-
-            //if (Input.GetKey(up) && Input.GetKeyDown(dig))
-            //{
-            //    main.DigTile(tileX, tileY - 1);
-            //}
-
-            if (Input.GetKeyDown(dig) && !alreadyDug)
-            {
-                main.DigTile(tileX, tileY + 1, playerID, offsetX);
-                SetCycle(8 + 12 * direction, 1);
-                downDiggingDelay = 16;
-                alreadyDug = true;
-            }
-
-            if (Input.GetKeyDown(bomb) && bombs > 0)
-            {
-                main.ExplodeTile(tileX, tileY, playerID, offsetX);
-                bombs--;
-            }
-
-
-            if(!isMoving && !alreadyDug)
-            {
-                SetCycle(4 + 12 * direction, 4);
-            }
-
-            if (sidewaysDiggingDelay > 0)
-            {
-                sidewaysDiggingDelay--;
-                SetCycle(8 + 12 * direction, 1);
-            }
-            if (downDiggingDelay > 0)
-            {
-                downDiggingDelay--;
-                SetCycle(9 + 12 * direction, 1);
             }
             AnimateFixed();
         }
