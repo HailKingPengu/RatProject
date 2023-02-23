@@ -13,10 +13,10 @@ namespace GXPEngine.UI.Menus
 
         public bool selected;
         int[] function;
-        //function is an array with length two: first int is function, second int is what is Affected
+        //function is an array with length two: first int is function, second int is what is affected
 
         //button has three states: idle, selected and pressed
-        public Button(String image, int x, int y, float scale, int[] function, MenuHandler menuHandler) : base(image, 2, 1)
+        public Button(int id, String image, int x, int y, float scale, int[] function, MenuHandler menuHandler) : base(image, 2, 1)
         {
             this.x = x;
             this.y = y;

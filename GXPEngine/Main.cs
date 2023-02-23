@@ -14,11 +14,11 @@ public class Digging : Game
 
     public Digging() : base(1366, 768, false)
     {
-        game = new GameInstance(width, height, "backGround.png");
+        game = new GameInstance(width, height, "backGround.png", this);
         game.paused = true;
         //AddChild(game);
 
-        menus = new MenuHandler(width, height, this);
+        menus = new MenuHandler(width, height, this, game);
         AddChild(menus);
 
         //game2 = new GameInstance(width / 2, height);
@@ -32,8 +32,26 @@ public class Digging : Game
         menus.isActive = false;
 
         AddChild(game);
+        //game.paused = false;
+        game.StartGame();
+    }
+
+    public void PauseGame()
+    {
+        AddChildAt(menus, 1);
+        menus.isActive = true;
+        menus.AddChild(menus.menus[3]);
+        menus.currentMenu = 3;
+        game.paused = true;
+    }
+
+    public void ResumeGame()
+    {
+        RemoveChild(menus);
+        menus.isActive = false;
+        menus.RemoveChild(menus.menus[menus.currentMenu]);
         game.paused = false;
-        //game.StartGame();
+        game.AddChild(game.p2Camera);
     }
 
     static void Main()                          // Main() is the first method that's called when the program is run

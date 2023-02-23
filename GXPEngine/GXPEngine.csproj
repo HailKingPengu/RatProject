@@ -45,10 +45,12 @@
     <Compile Include="Lighting\Light.cs" />
     <Compile Include="Particles\Particle.cs" />
     <Compile Include="Particles\ParticleSystem.cs" />
+    <Compile Include="Terrain\DynamitePickup.cs" />
     <Compile Include="Terrain\Terrain.cs" />
     <Compile Include="UI\Menus\Button.cs" />
     <Compile Include="UI\Menus\Menu.cs" />
     <Compile Include="UI\Menus\MenuHandler.cs" />
+    <Compile Include="UI\Menus\VolumeSlider.cs" />
     <Compile Include="UI\ProgressBar.cs" />
     <Compile Include="UI\UIHandler.cs" />
     <Compile Include="Player.cs" />
