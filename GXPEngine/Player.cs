@@ -50,7 +50,8 @@ namespace GXPEngine
 
         int playerID;
 
-        int diggingDelay;
+        int downDiggingDelay;
+        int sidewaysDiggingDelay;
         int direction;
 
         public Player(int playerID, string image, float airFriction, float groundFriction, int tileSize, int offsetX, int offsetY, GameInstance main, int gameWidth) : base(image, 4, 6)
@@ -183,7 +184,7 @@ namespace GXPEngine
                 {
                     main.DigTile(tileX + 1, tileY, playerID, offsetX);
                     SetCycle(8 + 12 * direction, 1);
-                    diggingDelay = 16;
+                    sidewaysDiggingDelay = 16;
                     alreadyDug = true;
                 }
             }
@@ -199,7 +200,7 @@ namespace GXPEngine
                 {
                     main.DigTile(tileX - 1, tileY, playerID, offsetX);
                     SetCycle(8 + 12 * direction, 1);
-                    diggingDelay = 16;
+                    sidewaysDiggingDelay = 16;
                     alreadyDug = true;
                 }
             }
@@ -220,7 +221,7 @@ namespace GXPEngine
             {
                 main.DigTile(tileX, tileY + 1, playerID, offsetX);
                 SetCycle(8 + 12 * direction, 1);
-                diggingDelay = 16;
+                downDiggingDelay = 16;
                 alreadyDug = true;
             }
 
@@ -236,10 +237,15 @@ namespace GXPEngine
                 SetCycle(4 + 12 * direction, 4);
             }
 
-            if (diggingDelay > 0)
+            if (sidewaysDiggingDelay > 0)
             {
-                diggingDelay--;
+                sidewaysDiggingDelay--;
                 SetCycle(8 + 12 * direction, 1);
+            }
+            if (downDiggingDelay > 0)
+            {
+                downDiggingDelay--;
+                SetCycle(9 + 12 * direction, 1);
             }
             AnimateFixed();
         }
