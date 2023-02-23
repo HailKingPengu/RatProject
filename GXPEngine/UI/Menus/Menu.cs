@@ -43,6 +43,12 @@ namespace GXPEngine.UI.Menus
             allIDS++;
         }
 
+        public void AddSprite(Sprite sprite)
+        {
+
+            AddChild(sprite);
+        }
+
         public void AddSlider(VolumeSlider slider)
         {
             selectables.Add(slider);

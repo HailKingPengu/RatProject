@@ -48,7 +48,7 @@ namespace GXPEngine
 
         Sprite light;
 
-        int playerID;
+        public int playerID;
 
         int downDiggingDelay;
         int sidewaysDiggingDelay;

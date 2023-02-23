@@ -293,6 +293,19 @@ namespace GXPEngine
                     RemoveChild(p2Camera);
                     main.PauseGame();
                 }
+
+                if (player1.y > 190 * tileSize)
+                //if (player1.y > 20 * tileSize)
+                {
+                    RemoveChild(p2Camera);
+                    main.GameOver(player1.playerID);
+                }
+                if (player2.y > 190 * tileSize)
+                //if (player2.y > 20 * tileSize)
+                {
+                    RemoveChild(p2Camera);
+                    main.GameOver(player2.playerID);
+                }
             }
 
 

@@ -54,6 +54,15 @@ public class Digging : Game
         game.AddChild(game.p2Camera);
     }
 
+    public void GameOver(int winnerID)
+    {
+        AddChildAt(menus, 1);
+        menus.isActive = true;
+        menus.AddChild(menus.menus[6]);
+        menus.currentMenu = 6;
+        game.paused = true;
+    }
+
     static void Main()                          // Main() is the first method that's called when the program is run
     {
         new Digging().Start();
