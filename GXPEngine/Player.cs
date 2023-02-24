@@ -57,6 +57,9 @@ namespace GXPEngine
         int sidewaysDiggingDelay;
         int direction;
 
+        int rightClicked;
+        int leftClicked;
+
         public Player(int playerID, string image, float airFriction, float groundFriction, int tileSize, int offsetX, int offsetY, GameInstance main, int gameWidth) : base(image, 4, 6)
         {
             SetOrigin(width / 2, height / 2);
@@ -191,6 +194,8 @@ namespace GXPEngine
                 //a
                 if (Input.GetKey(right))
                 {
+                    rightClicked = 5;
+
                     velocityX += movementForce * Time.deltaTime;
                     direction = 1;
                     SetCycle(0 + 12 * direction, 4);
@@ -204,9 +209,44 @@ namespace GXPEngine
                         alreadyDug = true;
                     }
                 }
-                //d
-                if (Input.GetKey(left))
+                else if (rightClicked > 0)
                 {
+                    rightClicked--;
+                    velocityX += movementForce * Time.deltaTime;
+                    direction = 1;
+                    SetCycle(0 + 12 * direction, 4);
+                    isMoving = true;
+
+                    if (Input.GetKeyDown(dig))
+                    {
+                        main.DigTile(tileX + 1, tileY, playerID, offsetX);
+                        SetCycle(8 + 12 * direction, 1);
+                        sidewaysDiggingDelay = 16;
+                        alreadyDug = true;
+                    }
+                }
+                    //d
+                    if (Input.GetKey(left))
+                {
+                    leftClicked = 5;
+
+                    velocityX -= movementForce * Time.deltaTime;
+                    direction = 0;
+                    SetCycle(0 + 12 * direction, 4);
+                    isMoving = true;
+
+                    if (Input.GetKeyDown(dig))
+                    {
+                        main.DigTile(tileX - 1, tileY, playerID, offsetX);
+                        SetCycle(8 + 12 * direction, 1);
+                        sidewaysDiggingDelay = 16;
+                        alreadyDug = true;
+                    }
+                }
+                else if(leftClicked > 0)
+                {
+                    leftClicked--;
+
                     velocityX -= movementForce * Time.deltaTime;
                     direction = 0;
                     SetCycle(0 + 12 * direction, 4);
@@ -251,6 +291,7 @@ namespace GXPEngine
                     sidewaysDiggingDelay--;
                     SetCycle(8 + 12 * direction, 1);
                 }
+
                 if (downDiggingDelay > 0)
                 {
                     downDiggingDelay--;
@@ -278,6 +319,9 @@ namespace GXPEngine
                     SetCycle(4, 4, 8); 
                 }
             }
+
+            Console.WriteLine(rightClicked);
+
             AnimateFixed();
         }
 

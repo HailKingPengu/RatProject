@@ -19,6 +19,8 @@ namespace GXPEngine.UI
 
         GameInstance game;
 
+        int canClick;
+
         public MenuHandler(int screenWidth, int screenHeight, Digging main, GameInstance game) 
         {
             Menu mainMenu = new Menu("StartPage.png", screenWidth, screenHeight, main);
@@ -108,23 +110,27 @@ namespace GXPEngine.UI
 
         public void Update()
         {
-            if (isActive)
+            if (isActive && canClick < 0)
             {
                 if(Input.GetKeyDown(Key.A))
                 {
+                    canClick = 50;
                     menus[currentMenu].PreviousButton();
                 }
 
                 if (Input.GetKeyDown(Key.D))
                 {
+                    canClick = 50;
                     menus[currentMenu].NextButton();
                 }
 
-                if (Input.GetKeyDown(Key.E) || Input.GetKeyDown(Key.Q))
+                if (Input.GetKey(Key.E) || Input.GetKey(Key.Q))
                 {
+                    canClick = 30;
                     menus[currentMenu].ButtonPressed();
                 }
             }
+            canClick--;
         }
     }
 }
