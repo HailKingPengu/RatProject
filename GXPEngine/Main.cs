@@ -34,6 +34,8 @@ public class Digging : Game
         AddChild(game);
         //game.paused = false;
         game.StartGame();
+
+        game.ChangeSong(1);
     }
 
     public void PauseGame()
@@ -43,6 +45,8 @@ public class Digging : Game
         menus.AddChild(menus.menus[3]);
         menus.currentMenu = 3;
         game.paused = true;
+
+        game.ChangeSong(0);
     }
 
     public void ResumeGame()
@@ -52,6 +56,8 @@ public class Digging : Game
         menus.RemoveChild(menus.menus[menus.currentMenu]);
         game.paused = false;
         game.AddChild(game.p2Camera);
+
+        game.ChangeSong(1);
     }
 
     public void RestartGame()
@@ -61,6 +67,8 @@ public class Digging : Game
         menus.RemoveChild(menus.menus[menus.currentMenu]);
         game.StartGame();
         game.paused = false;
+
+        game.ChangeSong(1);
     }
 
     public void GameOver()
@@ -70,6 +78,8 @@ public class Digging : Game
         menus.AddChild(menus.menus[6]);
         menus.currentMenu = 6;
         game.paused = true;
+
+        game.ChangeSong(0);
     }
 
     static void Main()                          // Main() is the first method that's called when the program is run

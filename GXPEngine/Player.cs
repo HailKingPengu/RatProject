@@ -153,6 +153,8 @@ namespace GXPEngine
                 {
                     GetCollisions(true, false)[0].Destroy();
                     bombs++;
+
+                    main.tntPickupSound.Play(false, 0, main.volumes[0]);
                 }
             }
 
@@ -273,7 +275,7 @@ namespace GXPEngine
                     goingToExplode = false;
                     main.ExplodeTile(tileX, tileY, playerID, offsetX);
                     bombs--;
-                    SetCycle(4, 4, 8);
+                    SetCycle(4, 4, 8); 
                 }
             }
             AnimateFixed();

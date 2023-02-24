@@ -20,6 +20,9 @@ namespace GXPEngine
 
         public AnimationSprite[,] tiles;
 
+        Sprite diamondSprite;
+        Sprite diamondGlow;
+
         DynamitePickup[] dynamitePickups = new DynamitePickup[12];
 
         public Terrain(int mapWidth, int mapHeight, int screenWidth, int screenHeight, int tileSize, int offsetX, int offsetY)
@@ -93,6 +96,19 @@ namespace GXPEngine
 
             }
 
+            diamondSprite = new Sprite("diamond.png", false, false);
+            AddChild(diamondSprite);
+            diamondSprite.SetOrigin(diamondSprite.width / 2, diamondSprite.height / 2);
+            diamondSprite.scale = 3;
+            diamondSprite.SetXY(screenWidth / 2, tileSize * 155);
+
+            diamondGlow = new Sprite("circle2.png", false, false);
+            AddChild(diamondGlow);
+            diamondGlow.SetOrigin(diamondGlow.width / 2, diamondGlow.height / 2);
+            diamondGlow.blendMode = BlendMode.LIGHTING;
+            diamondGlow.scale = 3;
+            diamondGlow.SetXY(screenWidth / 2, tileSize * 155);
+
 
             //for (int x = 0; x < mapWidth; x++)
             //{
@@ -155,6 +171,9 @@ namespace GXPEngine
                 dynamitePickups[i].y = dynamitePickups[i].pickupDepth - offsetY * tileSize - tileSize / 2;
 
             }
+
+            diamondSprite.y = tileSize * 160 - offsetY * tileSize;
+            diamondGlow.y = tileSize * 160 - offsetY * tileSize;
 
         }
 

@@ -59,6 +59,11 @@ namespace GXPEngine.UI.Menus
                 value = Mathf.Clamp(value, 0, 1);
                 gameInstance.volumes[id] = value;
                 slider.SetXY(683 - 140 + 290 * value, 384 + offsetY);
+
+                if (id == 1)
+                {
+                    gameInstance.SetMusicVolume(value);
+                }
             }
 
             return value;
@@ -72,6 +77,11 @@ namespace GXPEngine.UI.Menus
                 value = Mathf.Clamp(value, 0, 1);
                 gameInstance.volumes[id] = value;
                 slider.SetXY(683 - 140 + 290 * value, 384 + offsetY);
+
+                if (id == 1)
+                {
+                    gameInstance.SetMusicVolume(value);
+                }
             }
 
             return value;

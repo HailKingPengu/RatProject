@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using TiledMapParser;
 
 namespace GXPEngine
@@ -80,6 +81,11 @@ namespace GXPEngine
         Sound stoneSound;
         Sound explosionSound;
         Sound failSound;
+        public Sound tntPickupSound;
+
+
+        SoundChannel MenuMusic = new Sound("DigItMainMenu.wav", true, true).Play();
+        SoundChannel GameMusic = new Sound("DigItInGameMusic.wav", true, true).Play();
 
 
         public float[] volumes = new float[] {0.5f, 0.5f};
@@ -190,6 +196,7 @@ namespace GXPEngine
             stoneSound = new Sound("stoneDig.ogg");
             explosionSound = new Sound("explosion.ogg");
             failSound = new Sound("fail.ogg");
+            tntPickupSound = new Sound("tntPickup.ogg");
 
             startNumbers = new AnimationSprite("StartNumbers.png", 4, 1);
             startNumbers.x = -screenWidth / 4;
@@ -199,6 +206,8 @@ namespace GXPEngine
             gameOverScreen = new AnimationSprite("GameOverScreen.png", 2, 1);
 
             this.main = main;
+
+            ChangeSong(1);
 
             Console.WriteLine("MyGame initialized");
         }
@@ -284,6 +293,8 @@ namespace GXPEngine
             AddChildAt(gameOverScreen, 1000000);
             gameOverScreen.SetXY(-x, -y);
             gameOverScreen.currentFrame = winnerID;
+
+            ChangeSong(0);
         }
 
         void Update()
@@ -661,6 +672,26 @@ namespace GXPEngine
             particleSystem4.setBlendMode(BlendMode.LIGHTING);
             AddChildAt(particleSystem4, 9);
             particleSystem4.SetXY(x, y);
+        }
+
+        public void ChangeSong(int songID)
+        {
+            if (songID == 0)
+            {
+                MenuMusic.IsPaused = false;
+                GameMusic.IsPaused = true;
+            }
+            else
+            {
+                MenuMusic.IsPaused = true;
+                GameMusic.IsPaused = false;
+            }
+        }
+
+        public void SetMusicVolume(float value)
+        {
+            GameMusic.Volume = value;
+            MenuMusic.Volume = value;
         }
     }
 }

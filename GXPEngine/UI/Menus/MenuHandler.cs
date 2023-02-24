@@ -17,6 +17,8 @@ namespace GXPEngine.UI
 
         Digging main;
 
+        GameInstance game;
+
         public MenuHandler(int screenWidth, int screenHeight, Digging main, GameInstance game) 
         {
             Menu mainMenu = new Menu("StartPage.png", screenWidth, screenHeight, main);
@@ -53,8 +55,8 @@ namespace GXPEngine.UI
             pauseOptionsMenu.Initialize();
             menus.Add(pauseOptionsMenu);
 
-            Menu pauseControlMenu = new Menu("PausingMenu.png", screenWidth, screenHeight, main);
-            pauseControlMenu.AddButton(new Button(0, "BackButton.png", screenWidth / 2, 550, 1, new int[] { 0, 3 }, this));
+            Menu pauseControlMenu = new Menu("PauseControlsMenu.png", screenWidth, screenHeight, main);
+            pauseControlMenu.AddButton(new Button(0, "BackButton.png", screenWidth / 2 + 150, 560, 1, new int[] { 0, 3 }, this));
             pauseControlMenu.Initialize();
             menus.Add(pauseControlMenu);
 
@@ -68,6 +70,7 @@ namespace GXPEngine.UI
             controlMenu.Initialize();
             menus.Add(controlMenu);
 
+            this.game = game;
             this.main = main;
             
             //menus[currentMenu].NextButton();
@@ -80,16 +83,19 @@ namespace GXPEngine.UI
             if (scene == -1)
             {
                 main.PlayGame();
+                game.ChangeSong(1);
             }
 
             if (scene == -2)
             {
                 main.ResumeGame();
+                game.ChangeSong(1);
             }
 
             if (scene == -3)
             {
                 main.RestartGame();
+                game.ChangeSong(1);
             }
 
             if (scene >= 0)
